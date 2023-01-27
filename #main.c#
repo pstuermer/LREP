@@ -1,0 +1,93 @@
+B65;6003;1c#include "./src/splrep.h"
+#include "./src/splopb4dcg.h"
+#include <rsb.h>
+
+int main(void) {
+
+  const int type = 2;
+  const double shift = 0.0;
+  const int rsbTune = 1;
+
+  const int dim = 2;
+
+  int N[dim];
+  N[0] = 64;
+  N[1] = 64;
+
+  double ln[dim];
+  ln[0] = 20;
+  ln[1] = ln[0];
+
+  const int nev = 12;
+
+  const double mu = 5.7597536547e+00;//1.7888646026e+01;
+  double param[5] = { 0.0 };
+  param[0] = 1.0;
+  int trapChoice = 1;
+  int intChoice = 1;
+  double intParam[5] = { 0.0 };
+  intParam[0] = 100.0;
+
+  const double tol = 1.0e-8;
+  const int maxIter = 0;
+
+  struct sp_lrep_t *LREP;
+  printf("setting up LREP.\n");
+  LREP = splrep_setup("filepsi_drop_0.dat", N, ln, nev, dim, mu, param,
+		      type, shift, maxIter, tol, rsbTune, DATA_TYPE_DOUBLE);
+
+  printf("setup LREP.\n");
+
+  sp_lopb4dcg(LREP);
+
+  splrep_free( LREP );
+
+  return 0;
+  
+  /*
+  // Trying to test all my complex blas and lapack functions
+  double complex a[9];
+  a[0] = 1.0 + 9.0*I;
+  a[1] = 2.0 + 8.0*I;
+  a[2] = 3.0 + 7.0*I;
+
+  a[3] = 4.0 + 6.0*I;
+  a[4] = 5.0 + 5.0*I;
+  a[5] = 6.0 + 4.0*I;
+
+  a[6] = 7.0 + 3.0*I;
+  a[7] = 8.0 + 2.0*I;
+  a[8] = 9.0 + 1.0*I;
+
+  double complex b[9];
+  b[0] = 1.0 - I;
+  b[1] = 0.0;
+  b[2] = 0.0;
+  
+  b[3] = 0.0;
+  b[4] = 1.0 - 2*I;
+  b[5] = 0.0;
+  
+  b[6] = 0.0;
+  b[7] = 0.0;
+  b[8] = 1.0 - 3*I;
+
+  double complex out[9] = { 0.0 + I*0.0 };
+
+  double dtest[9];
+  dtest[0] = 1.0;
+  dtest[1] = 1.0;
+  dtest[2] = 1.0;
+  dtest[3] = 1.0;
+  dtest[4] = 1.0;
+  dtest[5] = 1.0;
+  dtest[6] = 1.0;
+  dtest[7] = -8.0;
+  dtest[8] = 8.0;
+
+  double ret = 0.0;
+  ret = dasum(9, a, DATA_TYPE_COMPLEX);
+  printf("%.5e\n", ret);
+  */
+  return 0;
+}

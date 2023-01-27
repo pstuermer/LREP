@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <errno.h>
+#include <complex.h>
+#include <time.h>
+
+// *******************************************************************
+// Includes a basic set of necessary libraries, as well as macros and
+// utility functions that replace the common malloc and calloc with ones
+// that have error checking included. PrintArray functions, print out
+// an array to save myself from writing for-loops all the time.
+// *******************************************************************
+
+#ifndef M_PI
+#define M_PI arcos(-1.0)
+#endif
+
+#ifndef RAND_MAX
+#define RAND_MAX((int) ((unsigned) ~0 >> 1))
+#endif
+
+#ifndef MAX
+#define MAX(a,b) (((a)>(b))?(a):(b))
+#endif
+
+#ifndef MIN
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#endif
+
+void *xmalloc(const int size);
+void *xcalloc(const int num, const int size);
+void *init_rand(void);
+double real_rand(double low, double high);
+void print_array_d(const int col, const int row, double *matrix);
+void print_array(const int col, const int row, int *matrix);

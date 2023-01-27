@@ -1,0 +1,951 @@
+==8673== Memcheck, a memory error detector
+==8673== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==8673== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==8673== Command: ./main.ex
+==8673== Parent PID: 8672
+==8673== 
+--8673-- 
+--8673-- Valgrind options:
+--8673--    --leak-check=full
+--8673--    --show-leak-kinds=all
+--8673--    --track-origins=yes
+--8673--    --verbose
+--8673--    --log-file=valgrind.out.txt
+--8673-- Contents of /proc/version:
+--8673--   Linux version 4.15.0-133-generic (buildd@lgw01-amd64-024) (gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.12)) #137~16.04.1-Ubuntu SMP Fri Jan 15 02:55:18 UTC 2021
+--8673-- 
+--8673-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-avx-avx2-bmi
+--8673-- Page sizes: currently 4096, max supported 4096
+--8673-- Valgrind library directory: /usr/lib/valgrind
+--8673-- Reading syms from /nfs/users3/philst/LREP/main.ex
+--8673-- Reading syms from /lib/x86_64-linux-gnu/ld-2.23.so
+--8673--   Considering /lib/x86_64-linux-gnu/ld-2.23.so ..
+--8673--   .. CRC mismatch (computed ceb73aaf wanted 8cb7c5ee)
+--8673--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/ld-2.23.so ..
+--8673--   .. CRC is valid
+--8673-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--8673--   Considering /usr/lib/valgrind/memcheck-amd64-linux ..
+--8673--   .. CRC mismatch (computed eea41ea9 wanted 2009db78)
+--8673--    object doesn't have a symbol table
+--8673--    object doesn't have a dynamic symbol table
+--8673-- Scheduler: using generic scheduler lock implementation.
+--8673-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==8673== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-8673-by-philst-on-???
+==8673== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-8673-by-philst-on-???
+==8673== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-8673-by-philst-on-???
+==8673== 
+==8673== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==8673== don't want to do, unless you know exactly what you're doing,
+==8673== or are doing some strange experiment):
+==8673==   /usr/lib/valgrind/../../bin/vgdb --pid=8673 ...command...
+==8673== 
+==8673== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==8673==   /path/to/gdb ./main.ex
+==8673== and then give GDB the following command
+==8673==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=8673
+==8673== --pid is optional if only one valgrind process is running
+==8673== 
+--8673-- REDIR: 0x401cf40 (ld-linux-x86-64.so.2:strlen) redirected to 0x3809e181 (???)
+--8673-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--8673--   Considering /usr/lib/valgrind/vgpreload_core-amd64-linux.so ..
+--8673--   .. CRC mismatch (computed 2567ccf6 wanted 49420590)
+--8673--    object doesn't have a symbol table
+--8673-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+--8673--   Considering /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so ..
+--8673--   .. CRC mismatch (computed 0e27c9a8 wanted ac585421)
+--8673--    object doesn't have a symbol table
+==8673== WARNING: new redirection conflicts with existing -- ignoring it
+--8673--     old: 0x0401cf40 (strlen              ) R-> (0000.0) 0x3809e181 ???
+--8673--     new: 0x0401cf40 (strlen              ) R-> (2007.0) 0x04c31020 strlen
+--8673-- REDIR: 0x401b890 (ld-linux-x86-64.so.2:index) redirected to 0x4c30bc0 (index)
+--8673-- REDIR: 0x401bab0 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c320d0 (strcmp)
+--8673-- REDIR: 0x401dca0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c35270 (mempcpy)
+--8673-- Reading syms from /lib/x86_64-linux-gnu/libm-2.23.so
+--8673--   Considering /lib/x86_64-linux-gnu/libm-2.23.so ..
+--8673--   .. CRC mismatch (computed 9ca17cae wanted 80886b26)
+--8673--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libm-2.23.so ..
+--8673--   .. CRC is valid
+--8673-- Reading syms from /usr/lib/openblas-base/liblapack.so.3
+--8673--    object doesn't have a symbol table
+--8673-- Reading syms from /usr/lib/libopenblasp-r0.2.18.so
+--8673--    object doesn't have a symbol table
+--8673-- Reading syms from /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0
+--8673--   Considering /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0 ..
+--8673--   .. CRC mismatch (computed 5e1455da wanted 52e18f0c)
+--8673--    object doesn't have a symbol table
+--8673-- Reading syms from /lib/x86_64-linux-gnu/libpthread-2.23.so
+--8673--   Considering /usr/lib/debug/.build-id/c5/57b8146e8079af46310b549de6912d1fc4ea86.debug ..
+--8673--   .. build-id is valid
+--8673-- Reading syms from /lib/x86_64-linux-gnu/libc-2.23.so
+--8673--   Considering /lib/x86_64-linux-gnu/libc-2.23.so ..
+--8673--   .. CRC mismatch (computed 2c57cb29 wanted 6e6a411e)
+--8673--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libc-2.23.so ..
+--8673--   .. CRC is valid
+--8673-- Reading syms from /usr/lib/x86_64-linux-gnu/libgfortran.so.3.0.0
+--8673--   Considering /usr/lib/x86_64-linux-gnu/libgfortran.so.3.0.0 ..
+--8673--   .. CRC mismatch (computed af0c32ca wanted bf92ffa5)
+--8673--    object doesn't have a symbol table
+--8673-- Reading syms from /lib/x86_64-linux-gnu/libdl-2.23.so
+--8673--   Considering /lib/x86_64-linux-gnu/libdl-2.23.so ..
+--8673--   .. CRC mismatch (computed 352992f5 wanted 897c40c5)
+--8673--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libdl-2.23.so ..
+--8673--   .. CRC is valid
+--8673-- Reading syms from /usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0
+--8673--   Considering /usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0 ..
+--8673--   .. CRC mismatch (computed 664b65a9 wanted 023bebde)
+--8673--    object doesn't have a symbol table
+--8673-- Reading syms from /lib/x86_64-linux-gnu/libgcc_s.so.1
+--8673--   Considering /lib/x86_64-linux-gnu/libgcc_s.so.1 ..
+--8673--   .. CRC mismatch (computed b9a68419 wanted 29d51b00)
+--8673--    object doesn't have a symbol table
+--8673-- REDIR: 0x7e88a80 (libc.so.6:strcasecmp) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7e84300 (libc.so.6:strcspn) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7e8ad70 (libc.so.6:strncasecmp) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7e86770 (libc.so.6:strpbrk) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7e86b00 (libc.so.6:strspn) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7e881cb (libc.so.6:memcpy@GLIBC_2.2.5) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7e86480 (libc.so.6:rindex) redirected to 0x4c308a0 (rindex)
+--8673-- REDIR: 0x7e7dd80 (libc.so.6:calloc) redirected to 0x4c2faa0 (calloc)
+--8673-- REDIR: 0x7e7d180 (libc.so.6:malloc) redirected to 0x4c2db20 (malloc)
+--8673-- REDIR: 0x7e8d4f0 (libc.so.6:__GI_memcpy) redirected to 0x4c32b00 (__GI_memcpy)
+--8673-- REDIR: 0x7e847a0 (libc.so.6:strlen) redirected to 0x4c30f60 (strlen)
+--8673-- REDIR: 0x7e88070 (libc.so.6:__GI_memmove) redirected to 0x4c347e0 (__GI_memmove)
+--8673-- REDIR: 0x7e7d540 (libc.so.6:free) redirected to 0x4c2ed80 (free)
+--8673-- REDIR: 0x7e88230 (libc.so.6:memset) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7f6ba70 (libc.so.6:__memset_avx2) redirected to 0x4c344c0 (memset)
+--8673-- REDIR: 0x7e86440 (libc.so.6:strncpy) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7e9f080 (libc.so.6:__strncpy_sse2_unaligned) redirected to 0x4c31570 (__strncpy_sse2_unaligned)
+--8673-- REDIR: 0x7e8f7e0 (libc.so.6:strchrnul) redirected to 0x4c34da0 (strchrnul)
+--8673-- REDIR: 0x7e878e0 (libc.so.6:memchr) redirected to 0x4c32170 (memchr)
+--8673-- REDIR: 0x7e870e0 (libc.so.6:__GI_strstr) redirected to 0x4c354d0 (__strstr_sse2)
+--8673-- REDIR: 0x7e88430 (libc.so.6:__GI_mempcpy) redirected to 0x4c34fa0 (__GI_mempcpy)
+--8673-- REDIR: 0x7e8d470 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--8673-- REDIR: 0x7f46fa0 (libc.so.6:__memcpy_avx_unaligned) redirected to 0x4c324a0 (memcpy@@GLIBC_2.14)
+--8673-- REDIR: 0x7e80680 (libc.so.6:posix_memalign) redirected to 0x4c300a0 (posix_memalign)
+--8673-- REDIR: 0x7e7d710 (libc.so.6:realloc) redirected to 0x4c2fce0 (realloc)
+==8673== Invalid read of size 4
+==8673==    at 0x417986: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba04 is 36 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 1
+==8673==    at 0x5720F2: rsb__is_root_matrix (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417998: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba06 is 38 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 2
+==8673==    at 0x572985: rsb__do_is_matrix_binary_loaded (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B12: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba06 is 38 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 4
+==8673==    at 0x417B16: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba04 is 36 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 8
+==8673==    at 0x417B22: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4baa8 is 200 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 4
+==8673==    at 0x417B65: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba04 is 36 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 8
+==8673==    at 0x417B6B: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4bad0 is 240 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 8
+==8673==    at 0x417B8A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4e268 is 10,376 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 8
+==8673==    at 0x417B8E: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4e258 is 10,360 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid read of size 8
+==8673==    at 0x417B92: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4e260 is 10,368 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid free() / delete / delete[] / realloc()
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4b9e0 is 0 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid free() / delete / delete[] / realloc()
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BCF: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x309729c0 is 0 bytes inside an unallocated block of size 1,891,248 in arena "client"
+==8673== 
+==8673== Invalid free() / delete / delete[] / realloc()
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BDC: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x30f56040 is 0 bytes inside a block of size 1,891,248 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BDC: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58DD53: rsb_util_coo_alloc_copy_and_stats (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41F98C: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== Invalid free() / delete / delete[] / realloc()
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BED: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x30b56040 is 0 bytes inside a block of size 3,782,496 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BED: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58DD32: rsb_util_coo_alloc_copy_and_stats (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41F98C: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== Process terminating with default action of signal 27 (SIGPROF)
+==8673==    at 0x7F01F0F: write_gmon (gmon.c:354)
+==8673==    by 0x7F02689: _mcleanup (gmon.c:422)
+==8673==    by 0x7E33007: __run_exit_handlers (exit.c:82)
+==8673==    by 0x7E33054: exit (exit.c:104)
+==8673==    by 0x7E19846: (below main) (libc-start.c:325)
+==8673== 
+==8673== HEAP SUMMARY:
+==8673==     in use at exit: 10,557,484 bytes in 25 blocks
+==8673==   total heap usage: 1,235 allocs, 1,214 frees, 116,092,748 bytes allocated
+==8673== 
+==8673== Searching for pointers to 25 not-freed blocks
+==8673== Checked 129,067,448 bytes
+==8673== 
+==8673== 8 bytes in 1 blocks are still reachable in loss record 1 of 12
+==8673==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x79C2778: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79CB647: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79C0DE1: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x40106F9: call_init.part.0 (dl-init.c:72)
+==8673==    by 0x401080A: call_init (dl-init.c:30)
+==8673==    by 0x401080A: _dl_init (dl-init.c:120)
+==8673==    by 0x4000C69: ??? (in /lib/x86_64-linux-gnu/ld-2.23.so)
+==8673== 
+==8673== 136 bytes in 1 blocks are still reachable in loss record 2 of 12
+==8673==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C2FDEF: realloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x79C27C8: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79CA41A: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79C5CB9: GOMP_parallel (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x427B26: rsb_bzero_parallel (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x5998C7: rsb__calloc_parallel (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58BC2A: rsb_util_sort_row_major_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B2F4: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673== 
+==8673== 192 bytes in 1 blocks are still reachable in loss record 3 of 12
+==8673==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x79C2778: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79C9ECA: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79C5CB9: GOMP_parallel (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x427B26: rsb_bzero_parallel (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x5998C7: rsb__calloc_parallel (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58BC2A: rsb_util_sort_row_major_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B2F4: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673== 
+==8673== 224 bytes in 1 blocks are indirectly lost in loss record 4 of 12
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x592051: rsb__get_array_of_leaf_matrices (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x594B0B: rsb__leaves_merge (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40F378: rsb__rblk_tune_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412AF6: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673== 
+==8673== 288 bytes in 1 blocks are possibly lost in loss record 5 of 12
+==8673==    at 0x4C2FB55: calloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x40138E4: allocate_dtv (dl-tls.c:322)
+==8673==    by 0x40138E4: _dl_allocate_tls (dl-tls.c:539)
+==8673==    by 0x7BE426E: allocate_stack (allocatestack.c:588)
+==8673==    by 0x7BE426E: pthread_create@@GLIBC_2.2.5 (pthread_create.c:539)
+==8673==    by 0x79C999F: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79C5CB9: GOMP_parallel (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x427B26: rsb_bzero_parallel (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x5998C7: rsb__calloc_parallel (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58BC2A: rsb_util_sort_row_major_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B2F4: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673== 
+==8673== 4,032 bytes in 14 blocks are possibly lost in loss record 6 of 12
+==8673==    at 0x4C2FB55: calloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x40138E4: allocate_dtv (dl-tls.c:322)
+==8673==    by 0x40138E4: _dl_allocate_tls (dl-tls.c:539)
+==8673==    by 0x7BE426E: allocate_stack (allocatestack.c:588)
+==8673==    by 0x7BE426E: pthread_create@@GLIBC_2.2.5 (pthread_create.c:539)
+==8673==    by 0x79C999F: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79C5CB9: GOMP_parallel (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x557F4F: rsb_do_spmv_recursive_parallel (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x5584FF: rsb_do_spmv_general (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41EE94: rsb__do_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40DD19: rsb__do_bench_spxm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40E432: rsb__do_bench_spxm_t (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40F906: rsb__rblk_tune_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412AF6: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673== 
+==8673== 4,288 bytes in 1 blocks are still reachable in loss record 7 of 12
+==8673==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x79C2778: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79C9489: ??? (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x79C5CA5: GOMP_parallel (in /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0)
+==8673==    by 0x557F4F: rsb_do_spmv_recursive_parallel (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x5584FF: rsb_do_spmv_general (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41EE94: rsb__do_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40C34C: rsb_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x4030F0: rsb_SPMM (rsbwrapper.c:58)
+==8673==    by 0x402CB4: main (main.c:153)
+==8673== 
+==8673== 1,891,248 bytes in 1 blocks are indirectly lost in loss record 8 of 12
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58E931: rsb__clone_simple (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40F1C3: rsb__rblk_tune_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412AF6: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673== 
+==8673== 1,891,248 bytes in 1 blocks are indirectly lost in loss record 9 of 12
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58E988: rsb__clone_simple (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40F1C3: rsb__rblk_tune_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412AF6: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673== 
+==8673== 2,975,204 bytes in 1 blocks are still reachable in loss record 10 of 12
+==8673==    at 0x4C2FB55: calloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x7F02503: monstartup (gmon.c:131)
+==8673==    by 0x402DD0: __gmon_start__ (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x89337A4: ??? (in /lib/x86_64-linux-gnu/libgcc_s.so.1)
+==8673==    by 0x81B97DF: ??? (in /lib/x86_64-linux-gnu/libc-2.23.so)
+==8673==    by 0x40106B9: call_init.part.0 (dl-init.c:58)
+==8673==    by 0x401080A: call_init (dl-init.c:30)
+==8673==    by 0x401080A: _dl_init (dl-init.c:120)
+==8673==    by 0x4000C69: ??? (in /lib/x86_64-linux-gnu/ld-2.23.so)
+==8673== 
+==8673== 3,782,496 bytes in 1 blocks are indirectly lost in loss record 11 of 12
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58E9F6: rsb__clone_simple (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40F1C3: rsb__rblk_tune_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412AF6: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673== 
+==8673== 7,573,336 (8,120 direct, 7,565,216 indirect) bytes in 1 blocks are definitely lost in loss record 12 of 12
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58EB26: rsb__clone_simple (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40F1C3: rsb__rblk_tune_inner (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412AF6: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673== 
+==8673== LEAK SUMMARY:
+==8673==    definitely lost: 8,120 bytes in 1 blocks
+==8673==    indirectly lost: 7,565,216 bytes in 4 blocks
+==8673==      possibly lost: 4,320 bytes in 15 blocks
+==8673==    still reachable: 2,979,828 bytes in 5 blocks
+==8673==         suppressed: 0 bytes in 0 blocks
+==8673== 
+==8673== ERROR SUMMARY: 24 errors from 17 contexts (suppressed: 0 from 0)
+==8673== 
+==8673== 1 errors in context 1 of 17:
+==8673== Invalid free() / delete / delete[] / realloc()
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BED: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x30b56040 is 0 bytes inside a block of size 3,782,496 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BED: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58DD32: rsb_util_coo_alloc_copy_and_stats (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41F98C: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 2 of 17:
+==8673== Invalid free() / delete / delete[] / realloc()
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BDC: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x30f56040 is 0 bytes inside a block of size 1,891,248 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BDC: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599681: rsb__malloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x58DD53: rsb_util_coo_alloc_copy_and_stats (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41F98C: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 3 of 17:
+==8673== Invalid free() / delete / delete[] / realloc()
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417BCF: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x309729c0 is 0 bytes inside an unallocated block of size 1,891,248 in arena "client"
+==8673== 
+==8673== 
+==8673== 1 errors in context 4 of 17:
+==8673== Invalid free() / delete / delete[] / realloc()
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4b9e0 is 0 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 5 of 17:
+==8673== Invalid read of size 8
+==8673==    at 0x417B92: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4e260 is 10,368 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 6 of 17:
+==8673== Invalid read of size 8
+==8673==    at 0x417B8E: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4e258 is 10,360 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 7 of 17:
+==8673== Invalid read of size 8
+==8673==    at 0x417B8A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4e268 is 10,376 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 8 of 17:
+==8673== Invalid read of size 8
+==8673==    at 0x417B6B: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4bad0 is 240 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 9 of 17:
+==8673== Invalid read of size 4
+==8673==    at 0x417B65: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba04 is 36 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 10 of 17:
+==8673== Invalid read of size 2
+==8673==    at 0x572985: rsb__do_is_matrix_binary_loaded (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B12: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba06 is 38 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 11 of 17:
+==8673== Invalid read of size 1
+==8673==    at 0x5720F2: rsb__is_root_matrix (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417998: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba06 is 38 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 1 errors in context 12 of 17:
+==8673== Invalid read of size 4
+==8673==    at 0x417986: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba04 is 36 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 4 errors in context 13 of 17:
+==8673== Invalid read of size 8
+==8673==    at 0x417B22: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4baa8 is 200 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== 
+==8673== 5 errors in context 14 of 17:
+==8673== Invalid read of size 4
+==8673==    at 0x417B16: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403DDB: splrep_free (splrep.c:72)
+==8673==    by 0x402CEE: main (main.c:160)
+==8673==  Address 0x2df4ba04 is 36 bytes inside a block of size 14,000 free'd
+==8673==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599648: rsb(float, long double,...)(...) (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x417B9A: rsb__do_mtx_free (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x412631: rsb__tune_spxx_bos (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41377F: rsb__do_tune_spmm (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x402C16: main (main.c:133)
+==8673==  Block was alloc'd at
+==8673==    at 0x4C2FFC6: memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x4C300D1: posix_memalign (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8673==    by 0x599826: rsb__calloc (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x42B071: rsb__allocate_recursive_sparse_matrix_from_row_major_coo (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x41FA18: rsb__do_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x40BE74: rsb_mtx_alloc_from_coo_const (in /nfs/users3/philst/LREP/main.ex)
+==8673==    by 0x403020: rsb_mtx_from_coo (rsbwrapper.c:28)
+==8673==    by 0x403D33: splrep_malloc (splrep.c:54)
+==8673==    by 0x404243: splrep_setup (splrep.c:194)
+==8673==    by 0x40293F: main (main.c:36)
+==8673== 
+==8673== ERROR SUMMARY: 24 errors from 17 contexts (suppressed: 0 from 0)
