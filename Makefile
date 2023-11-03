@@ -2,10 +2,10 @@
 OBJECT_FILES = gen.o coo.o grid.o physics.o openblaswrapper.o lapackwrapper.o rsbwrapper.o precond.o splrep.o splopb4dcg.o
 HEADER_FILES = ./src/gen.h ./src/coo.h ./src/grid.h ./src/physics.h ./src/openblaswrapper.h ./src/lapackwrapper.h ./src/rsbwrapper.h ./src/precond.h ./src/splrep.h ./src/splopb4dcg.h
 GEN_PATH = include/gen.h
-OPENBLAS_PATH1 = $HOME/OpenBlas/lib
-OPENBLAS_PATH2 = $HOME/OpenBlas/include
+OPENBLAS_PATH1 = $HOME/blis-marax/lib
+OPENBLAS_PATH2 = $HOME/blis-marax/include
 LAPACK_PATH = $HOME/ARPACK/LAPACK
-RSB_PATH = $HOME/librsb/lib
+RSB_PATH = $HOME/librsb-marax/lib
 
 I_OPTS = "{includedir}"
 includedir = "${prefix}/include"
