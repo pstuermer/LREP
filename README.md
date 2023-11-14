@@ -7,7 +7,11 @@ This software is a CPU-based Linear Response Eigenvalue Problem (LREP) Solver ut
 
 For dense matrices, matrix-operations are implemented using OpenBlas (soon to be replaced with BLIS). For sparse matrices, they are implemented using the Recursive Sparse Blocks Format (https://librsb.sourceforge.net/). Currently represents operators via finite-difference on periodic boundary conditions using a plane-wave representation.
 
-A Linear Response Eigenvalue Problem occurs if one were to allow the groundstate $\psi_0$ of a Density-Functional Theory type calculation to have quasiparticle excitations with energy $\hbar\omega$. The resulting Eigenvalue Problem can be written as $$\begin{bmatrix}\mathbf{u} = \hbar\omega\mathbf{u},$$ where both $K$ and $M$ are symmetric and at least one of them is positive semi-definite. In my field of ultra-cold Bose gases the 'Density-Functional Theory type calculation' is replaced by the so-called Gross-Pitaevskii equation or non-linear Schroedinger equation, assuming $T=0$.
+A Linear Response Eigenvalue Problem occurs if one were to allow the groundstate $\psi_0$ of a Density-Functional Theory type calculation to have quasiparticle excitations with energy $\hbar\omega$. The resulting Eigenvalue Problem can be written as 
+```math
+\begin{bmatrix}0&K\\M&0\end{bmatrix}\mathbf{u} =\hbar\omega\mathbf{u},
+```
+where both $K$ and $M$ are symmetric and at least one of them is positive semi-definite. In my field of ultra-cold Bose gases the 'Density-Functional Theory type calculation' is replaced by the so-called Gross-Pitaevskii equation or non-linear Schroedinger equation, assuming $T=0$.
 
 Because of this, the code comes in two parts:
   - Construcing the matrices $K$ and $M$ in splrep.c/.h
