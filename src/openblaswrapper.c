@@ -18,7 +18,7 @@ double asum(const int n, const void *vec, const char flag) {
   return ret;
 }
  
-void *sub_vec(const int n, void *vec1, const void *vec2,
+void sub_vec(const int n, void *vec1, const void *vec2,
 	      const char flag) { 
   double DA[2];
  
@@ -38,7 +38,7 @@ void *sub_vec(const int n, void *vec1, const void *vec2,
   return NULL;  
 }
  
-void *add_vec(const int n, void *vec1, const void *vec2,
+void add_vec(const int n, void *vec1, const void *vec2,
 	      const char flag) {  
   double DA[2]; 
 
@@ -58,7 +58,7 @@ void *add_vec(const int n, void *vec1, const void *vec2,
   return NULL;  
 }
  
-void *copy_vec(const int n, const void *vec, void *target,
+void copy_vec(const int n, const void *vec, void *target,
 	       const char flag) {
   int INCX, INCY;  
   INCX = 1;  
@@ -87,7 +87,7 @@ void *scale_vec(const int n, void *vec, double alpha,
   return NULL;  
 }
 
-void *zscale_vec(const int n, double complex *vec,
+void zscale_vec(const int n, double complex *vec,
 		 double complex alpha) {
   int INCX;
   INCX = 1;
@@ -175,7 +175,7 @@ double complex zdot_product(const int n, double complex *vec1, double complex *v
 //  BLAS Level 2
 // ----------------------------
  
-void *gemv_N(const int colA, const int rowA, const void *matrix, 
+void gemv_N(const int colA, const int rowA, const void *matrix, 
 	     const void *vec, void *out, const char flag) {  
  
   int lda, incx, incy;
@@ -201,7 +201,7 @@ void *gemv_N(const int colA, const int rowA, const void *matrix,
   return NULL;  
 }
  
-void *gemv_T(const int colA, const int rowA, const void *matrix,
+void gemv_T(const int colA, const int rowA, const void *matrix,
 	     const void *vec, void *out, const char flag) {  
   int lda, incx, incy;
   double one[2], zero[2];
@@ -265,11 +265,13 @@ void *zgemv_T(const int colA, const int rowA,
   return NULL;
 }
 */
+
+
 // ----------------------------
 //  BLAS Level 3
 // ----------------------------
  
-void *gemm_NN(const int rowA, const int rowB, const int colA,
+void gemm_NN(const int rowA, const int rowB, const int colA,
 	      const void *matrixA, const void *matrixB, 
 	      void *matrixC, const char flag) {  
 
@@ -296,9 +298,9 @@ void *gemm_NN(const int rowA, const int rowB, const int colA,
   return NULL;  
 }
  
-void *gemm_NT(const int rowA, const int rowB, const int colA, 
-	      const void *matrixA, const void *matrixB, 
-	      void* matrixC, const char flag) {  
+void gemm_NT(const int rowA, const int rowB, const int colA, 
+	     const void *matrixA, const void *matrixB, 
+	     void* matrixC, const char flag) {  
   int lda, ldb, ldc;  
   double one[2], zero[2];
 
@@ -322,9 +324,9 @@ void *gemm_NT(const int rowA, const int rowB, const int colA,
   return NULL;  
 }
  
-void *gemm_TN(const int rowA, const int colB, const int colA,
-	       const void *matrixA, const void *matrixB, 
-	       void *matrixC, const char flag) {  
+void gemm_TN(const int rowA, const int colB, const int colA,
+	     const void *matrixA, const void *matrixB, 
+	     void *matrixC, const char flag) {  
   int lda, ldb, ldc;  
   double one[2], zero[2];
 
@@ -348,9 +350,9 @@ void *gemm_TN(const int rowA, const int colB, const int colA,
   return NULL;  
 }
 
-void *gemm_TT(const int rowA, const int rowB, const int colA,
-	       const void *matrixA, const void *matrixB, 
-	       void *matrixC, const char flag) {  
+void gemm_TT(const int rowA, const int rowB, const int colA,
+	     const void *matrixA, const void *matrixB, 
+	     void *matrixC, const char flag) {  
   int lda, ldb, ldc;  
   double one[2], zero[2];
 
@@ -399,10 +401,10 @@ void *gemm_NN_s(const int rowA, const int rowB, const int colA,
   return NULL;  
 }
 
-void *gemm_NN_scal_add(const int rowA, const int colB, const int colA,                            
-                       const void *matrixA, const void *matrixB,                                  
-                       void *matrixC, const double alpha, const double beta,                      
-                       const char flag) {                                                         
+void gemm_NN_scal_add(const int rowA, const int colB, const int colA,                            
+		      const void *matrixA, const void *matrixB,                                  
+		      void *matrixC, const double alpha, const double beta,                      
+		      const char flag) {                                                         
                                                                                                   
   int lda, ldb, ldc;                                                                              
   double dalpha[2], dbeta[2];                                                                     
@@ -426,8 +428,8 @@ void *gemm_NN_scal_add(const int rowA, const int colB, const int colA,
   return NULL;                                                                                    
 }
  
-void *dmatrix_trans(const int rows, const int cols, 
-		    double* src, double* dst) { 
+void dmatrix_trans(const int rows, const int cols, 
+		   double* src, double* dst) { 
   // pragma omp parallel for
   // rows and cols correspond to src, not dst 
   int i, j;  
@@ -440,8 +442,8 @@ void *dmatrix_trans(const int rows, const int cols,
   return NULL;  
 }
 
-void *zmatrix_trans(const int rows, const int cols,
-		    double complex *src, double complex *dst) {
+void zmatrix_trans(const int rows, const int cols,
+		   double complex *src, double complex *dst) {
   // rows and cols correspond to src, not dst
   int i, j;
   for(int k = 0; k < rows*cols; k++) {
@@ -453,8 +455,8 @@ void *zmatrix_trans(const int rows, const int cols,
   return NULL;
 }
 
-void *matrix_trans(const int rows, const int cols,
-		   void *src, void *dst, const char flag) {
+void matrix_trans(const int rows, const int cols,
+		  void *src, void *dst, const char flag) {
   if(flag == 'D') {
     printf("picked double transpose.\n");
     dmatrix_trans(rows, cols, src, dst);

@@ -22,7 +22,7 @@ typedef struct grid_t {
 } grid_t;
 
 
-struct grid_t* grid_malloc(const int dim, const int N[dim], const double ln[dim]);
+struct grid_t *grid_malloc(const int dim, const int N[dim], const double ln[dim]);
 void grid_free(grid_t *grid);
 void grid_setup(grid_t *grid);
-void* idx_unravel(int *index, int i, grid_t *grid);
+void idx_unravel(int *index, int i, grid_t *grid);

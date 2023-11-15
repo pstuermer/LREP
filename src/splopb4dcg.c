@@ -2,7 +2,7 @@
 #include "splopb4dcg.h"
 #include <rsb.h>
 
-void *sp_get_search_dird(struct sp_lrep_t *LREP) {
+void sp_get_search_dird(struct sp_lrep_t *LREP) {
 
   double num1, num2, denom;
   const int n = LREP->size;
@@ -45,7 +45,7 @@ void *sp_get_search_dird(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_get_search_dirz(struct sp_lrep_t *LREP) {
+void sp_get_search_dirz(struct sp_lrep_t *LREP) {
 
   double complex num1, num2, denom;
   const int n = LREP->size;
@@ -82,7 +82,7 @@ void *sp_get_search_dirz(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_get_search_dir(struct sp_lrep_t *LREP) {
+void sp_get_search_dir(struct sp_lrep_t *LREP) {
   if(LREP->flag == 'D') {
     sp_get_search_dird(LREP);
   } else if(LREP->flag == 'Z') {
@@ -92,7 +92,7 @@ void *sp_get_search_dir(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_setup_P(struct sp_lrep_t *LREP) {    
+void sp_setup_P(struct sp_lrep_t *LREP) {    
   const int n = LREP->size;  
   const int sizeSub = LREP->sizeSub;   
   
@@ -105,7 +105,7 @@ void *sp_setup_P(struct sp_lrep_t *LREP) {
   return NULL;    
 }  
 
-void *sp_setup_Q(struct sp_lrep_t *LREP) {    
+void sp_setup_Q(struct sp_lrep_t *LREP) {    
   const const int n = LREP->size;  
   const const int sizeSub = LREP->sizeSub;   
    
@@ -118,7 +118,7 @@ void *sp_setup_Q(struct sp_lrep_t *LREP) {
   return NULL;    
 } 
 
-void* sp_apply_precondd(struct sp_lrep_t *LREP) { 
+void sp_apply_precondd(struct sp_lrep_t *LREP) { 
    
   int type = LREP->spPrecond->type;  
   const int n = LREP->size;  
@@ -181,7 +181,7 @@ void* sp_apply_precondd(struct sp_lrep_t *LREP) {
   return NULL;    
 }
 
-void *sp_apply_precondz(struct sp_lrep_t *LREP) {
+void sp_apply_precondz(struct sp_lrep_t *LREP) {
 
   int type = LREP->spPrecond->type;
   const int n = LREP->size;
@@ -245,7 +245,7 @@ void *sp_apply_precondz(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_apply_precond(struct sp_lrep_t *LREP) {
+void sp_apply_precond(struct sp_lrep_t *LREP) {
   if(LREP->flag == 'D') {
     sp_apply_precondd(LREP);
   } else if(LREP->flag == 'Z') {
@@ -255,7 +255,7 @@ void *sp_apply_precond(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_setup_U(struct sp_lrep_t *LREP) {    
+void sp_setup_U(struct sp_lrep_t *LREP) {    
   const int n = LREP->size;  
   const int sizeSub = LREP->sizeSub;   
   int mult;  
@@ -288,7 +288,7 @@ void *sp_setup_U(struct sp_lrep_t *LREP) {
   return NULL;    
 }
 
-void *sp_setup_V(struct sp_lrep_t *LREP) {    
+void sp_setup_V(struct sp_lrep_t *LREP) {    
   const int n = LREP->size;  
   const int sizeSub = LREP->sizeSub;   
   int mult;  
@@ -321,7 +321,7 @@ void *sp_setup_V(struct sp_lrep_t *LREP) {
   return NULL;    
 }
 
-void* sp_setup_W(struct sp_lrep_t *LREP) {    
+void sp_setup_W(struct sp_lrep_t *LREP) {    
   const int n = LREP->size;  
   int mult;  
   if(LREP->iter == 0) {
@@ -336,7 +336,7 @@ void* sp_setup_W(struct sp_lrep_t *LREP) {
   return NULL;    
 }
 
-void *sp_setup_Hsrd(struct sp_lrep_t *LREP) {  
+void sp_setup_Hsrd(struct sp_lrep_t *LREP) {  
   // I am not so super sure about the sizes for rsb_SPMM here  
   const int n = LREP->size;  
   int mult;  
@@ -389,7 +389,7 @@ void *sp_setup_Hsrd(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_setup_Hsrz(struct sp_lrep_t *LREP) {
+void sp_setup_Hsrz(struct sp_lrep_t *LREP) {
   const int n = LREP->size;
   int mult;
   if(LREP->iter == 0) {
@@ -438,7 +438,7 @@ void *sp_setup_Hsrz(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_setup_Hsr(struct sp_lrep_t *LREP) {
+void sp_setup_Hsr(struct sp_lrep_t *LREP) {
   if(LREP->flag == 'D') {
     sp_setup_Hsrd(LREP);
   } else if(LREP->flag == 'Z') {
@@ -448,7 +448,7 @@ void *sp_setup_Hsr(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_sort_eigd(struct sp_lrep_t *LREP) {   
+void sp_sort_eigd(struct sp_lrep_t *LREP) {   
   const int sizeSub = LREP->sizeSub;   
   int mult;  
   if(LREP->iter == 0) {
@@ -496,7 +496,7 @@ void *sp_sort_eigd(struct sp_lrep_t *LREP) {
   return NULL;    
 }
 
-void *sp_sort_eigz(struct sp_lrep_t *LREP) {
+void sp_sort_eigz(struct sp_lrep_t *LREP) {
 
   // for complex case this works a bit differently
   // first have to sort all eigenvalues (or 2*sizeSub)
@@ -638,7 +638,7 @@ void *sp_sort_eigz(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_sort_eig(struct sp_lrep_t *LREP) {
+void sp_sort_eig(struct sp_lrep_t *LREP) {
   if(LREP->flag == 'D') {
     sp_sort_eigd(LREP);
   } else if(LREP->flag == 'Z') {
@@ -648,7 +648,7 @@ void *sp_sort_eig(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_split_eig_vec(struct sp_lrep_t *LREP) {    
+void sp_split_eig_vec(struct sp_lrep_t *LREP) {    
   const int sizeSub = LREP->sizeSub;   
   int mult;  
   if(LREP->iter == 0) {
@@ -668,7 +668,7 @@ void *sp_split_eig_vec(struct sp_lrep_t *LREP) {
   return NULL;    
 }
 
-void *sp_compute_eig_vec(struct sp_lrep_t *LREP) {  
+void sp_compute_eig_vec(struct sp_lrep_t *LREP) {  
   const int n = LREP->size;  
   const int sizeSub = LREP->sizeSub;   
   int mult;  
@@ -706,7 +706,7 @@ void *sp_compute_eig_vec(struct sp_lrep_t *LREP) {
 }
 
 
-void *sp_normalize_eig_vec(struct sp_lrep_t *LREP) {
+void sp_normalize_eig_vec(struct sp_lrep_t *LREP) {
   const int n = LREP->size;  
   const int sizeSub = LREP->sizeSub;
 
@@ -767,7 +767,7 @@ void *sp_normalize_eig_vec(struct sp_lrep_t *LREP) {
   return NULL;    
 }
 
-void *sp_get_residual_normd(struct sp_lrep_t *LREP) {
+void sp_get_residual_normd(struct sp_lrep_t *LREP) {
   const int n = LREP->size;  
   const int sizeSub = LREP->sizeSub;   
    
@@ -813,7 +813,7 @@ void *sp_get_residual_normd(struct sp_lrep_t *LREP) {
   return NULL;    
 }
 
-void *sp_get_residual_normz(struct sp_lrep_t *LREP) {
+void sp_get_residual_normz(struct sp_lrep_t *LREP) {
   const int n = LREP->size;
   const int sizeSub = LREP->sizeSub;
 
@@ -859,7 +859,7 @@ void *sp_get_residual_normz(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_get_residual_norm(struct sp_lrep_t *LREP) {
+void sp_get_residual_norm(struct sp_lrep_t *LREP) {
   if(LREP->flag == 'D') {
     sp_get_residual_normd(LREP);
   } else if(LREP->flag == 'Z') {
@@ -869,7 +869,7 @@ void *sp_get_residual_norm(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void *sp_switch_eig_vec(struct sp_lrep_t *LREP) {
+void sp_switch_eig_vec(struct sp_lrep_t *LREP) {
   // in the current iteration we saved the new eigenvectors in X1 and Y1 
   // however, in the next iteration those will be considered as
   // "the eigenvectors of the previous iteration"    
@@ -911,7 +911,7 @@ void *sp_switch_eig_vec(struct sp_lrep_t *LREP) {
 }
 
 
-void *sp_lopb4dcg(sp_lrep_t *LREP) {
+void sp_lopb4dcg(sp_lrep_t *LREP) {
 
   int mult;
   //  double s[3*LREP->sizeSub];

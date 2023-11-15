@@ -46,21 +46,21 @@ struct cond_t* cond_malloc(const int type, const double shift);
 
 void cond_free(struct cond_t *cond);
 
-void* sp_setup_precond(struct sp_lrep_t *LREP);
+void sp_setup_precond(struct sp_lrep_t *LREP);
 
-void* sp_get_diag_precond(struct sp_lrep_t *LREP);
+void sp_get_diag_precond(struct sp_lrep_t *LREP);
 
-void* sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
-		   double *sol, const int size,
-		   struct rsb_mtx_t *spMatrixDiag);
-void *sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
-			  double *solMat, const int size, const int nrhs,
-			  struct rsb_mtx_t *spMatrixDiag, const int maxIter,
-			  const double tol);
-void *sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
-			  double complex *solMat, const int size,
-			  const int nrhs, struct rsb_mtx_t *spMatrixDiag,
-			  const int maxIter, const double tol);
+void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
+		  double *sol, const int size,
+		  struct rsb_mtx_t *spMatrixDiag);
+void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
+			 double *solMat, const int size, const int nrhs,
+			 struct rsb_mtx_t *spMatrixDiag, const int maxIter,
+			 const double tol);
+void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
+			 double complex *solMat, const int size,
+			 const int nrhs, struct rsb_mtx_t *spMatrixDiag,
+			 const int maxIter, const double tol);
 
-void* de_conj_grad(double *deMatrix, double *dVec, double *sol,
-		   const int size, struct rsb_mtx_t *deMatrixDiag);
+void de_conj_grad(double *deMatrix, double *dVec, double *sol,
+		  const int size, struct rsb_mtx_t *deMatrixDiag);

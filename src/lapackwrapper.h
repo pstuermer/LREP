@@ -108,37 +108,37 @@ extern void zgelss_(int *M, int *N, int *NRHS, double complex *A,
 		    int *LWORK, double complex *RWORK, int *INFO);
 
 
-void *dp_inverse(const int m, const int n, double *matrix, double *target);
-void *dcopy_matrix(const int m, const int n, double *matrix, double *target);    
+void dp_inverse(const int m, const int n, double *matrix, double *target);
+void dcopy_matrix(const int m, const int n, double *matrix, double *target);    
 double dget_1_norm(const int m, const int n, double *matrix);  
-void *dget_q(const int m, const int n, double *matrix);     
-void *dcalc_sing_val(const int m, const int n, double *sVal, double *matrix);   
-void *dcalc_eig_val(const int n, double *matrix, double *eigVal, double *eigVec); 
-void *dmatrix_inverse(const int m, double *matrix);
+void dget_q(const int m, const int n, double *matrix);     
+void dcalc_sing_val(const int m, const int n, double *sVal, double *matrix);   
+void dcalc_eig_val(const int n, double *matrix, double *eigVal, double *eigVec); 
+void dmatrix_inverse(const int m, double *matrix);
 
 
-void *zp_inverse(const int m, const int n, double complex *matrix,
+void zp_inverse(const int m, const int n, double complex *matrix,
 		 double complex *target);
-void *zcopy_matrix(const int m, const int n, double complex *matrix,
+void zcopy_matrix(const int m, const int n, double complex *matrix,
 		   double complex *target);
-void *zget_q(const int m, const int n, double complex *matrix);
-void *zcalc_sing_val(const int m, const int n, double *sVal, double complex *matrix);
-void *zcalc_eig_val(const int n, double complex *matrix,
+void zget_q(const int m, const int n, double complex *matrix);
+void zcalc_sing_val(const int m, const int n, double *sVal, double complex *matrix);
+void zcalc_eig_val(const int n, double complex *matrix,
 		    double complex *eigVal, double complex *eigVec);
-void *zmatrix_inverse(const int m, double complex *matrix);
+void zmatrix_inverse(const int m, double complex *matrix);
 
 
-void *p_inverse(const int m, const int n, void *matrix,
+void p_inverse(const int m, const int n, void *matrix,
 		void *target, const char flag);
-void *copy_matrix(const int m, const int n, void *matrix,
+void copy_matrix(const int m, const int n, void *matrix,
 		  void *target, const char flag);
-void *get_q(const int m, const int n, void *matrix,
+void get_q(const int m, const int n, void *matrix,
 	    const char flag);
-void *calc_sing_val(const int m, const int n, double *sVal, void *matrix,
+void calc_sing_val(const int m, const int n, double *sVal, void *matrix,
 		    const char flag);
-void *calc_eig_val(const int m, void *matrix, void *eigVal, void *eigVec,
+void calc_eig_val(const int m, void *matrix, void *eigVal, void *eigVec,
 		   const char flag);
-void *matrix_inverse(const int m, void *matrix, const char flag);
+void matrix_inverse(const int m, void *matrix, const char flag);
 
 double d_norm(const int m, const int n, double *matrix, char NORM);
 double z_norm(const int m, const int n, double complex *matrix, char NORM);

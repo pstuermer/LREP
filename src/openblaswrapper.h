@@ -35,15 +35,15 @@
 //        BLAS LEVEl 1                                                                  
 // ----------------------------                                                         
 double asum(const int n, const void *vec, const char flag);
-void *sub_vec(const int n, void *vec1, const void *vec2,
+void sub_vec(const int n, void *vec1, const void *vec2,
 	      const char flag);
-void *add_vec(const int n, void *vec1, const void *vec2,
+void add_vec(const int n, void *vec1, const void *vec2,
 	      const char flag);
-void *copy_vec(const int n, const void *vec, void *target,
+void copy_vec(const int n, const void *vec, void *target,
 	       const char flag);
-void *scale_vec(const int n, void *vec, double alpha,
+void scale_vec(const int n, void *vec, double alpha,
 		const char flag);
-void *zscale_vec(const int n, double complex *vec,
+void zscale_vec(const int n, double complex *vec,
 		 double complex alpha);
 double ddot_product(const int n, double *vec1, double *vec2);
 /*
@@ -58,10 +58,10 @@ double complex zdot_product(const int n, double complex *vec1, double complex *v
 // ----------------------------                                                         
 //        BLAS LEVEL 2                                                                  
 // ----------------------------                                                         
-void *gemv_N(const int colA, const int rowA,
+void gemv_N(const int colA, const int rowA,
 	     const void *matrix, const void *vec,
 	     void *out, const char flag);
-void *gemv_T(const int colA, const int rowA,
+void gemv_T(const int colA, const int rowA,
 	     const void *matrix, const void *vec,
 	     void *out, const char flag);
 /*
@@ -75,26 +75,26 @@ void *zgemv_T(const int colA, const int rowA,
 // ----------------------------                                                         
 //        BLAS LEVEL 3                                                                  
 // ----------------------------                                                         
-void *gemm_NN(const int rowA, const int rowB, const int colA,
+void gemm_NN(const int rowA, const int rowB, const int colA,
 	      const void *matrixA, const void *matrixB,
 	      void *matrixC, const char flag);         
-void *gemm_NT(const int rowA, const int rowB, const int colA,
+void gemm_NT(const int rowA, const int rowB, const int colA,
 	      const void *matrixA, const void *matrixB,
 	      void *matrixC, const char flag);         
-void *gemm_TN(const int rowA, const int rowB, const int colA,
+void gemm_TN(const int rowA, const int rowB, const int colA,
 	      const void *matrixA, const void *matrixB,
 	      void *matrixC, const char flag);         
-void *gemm_TT(const int rowA, const int rowB, const int colA,
+void gemm_TT(const int rowA, const int rowB, const int colA,
 	      const void *matrixA, const void *matrixB,
 	      void *matrixC, const char flag);         
-void *gemm_NN_s(const int rowA, const int rowB, const int colA,
+void gemm_NN_s(const int rowA, const int rowB, const int colA,
 		const void *matrixA, const void *matrixB,
 		void *matrixC, const char flag);       
-void *gemm_NN_scal_add(const int rowA, const int colB, const int colA,
+void gemm_NN_scal_add(const int rowA, const int colB, const int colA,
 		       const void *matrixA, const void *matrixB,
 		       void *matrixC, const double alpha, const double beta,
 		       const char flag);
-void *dmatrix_trans(const int rows, const int cols,
+void dmatrix_trans(const int rows, const int cols,
 		    double *src, double *dst);
 /*
 void *zgemm_NN(const int rowA, const int rowB, const int colA,
@@ -110,8 +110,8 @@ void *zgemm_NN_s(const int rowA, const int rowB, const int colA,
 		 double complex *matrixA, double complex *matrixB,
 		 double complex *matrixC);
 */
-void *zmatrix_trans(const int rows, const int cols,
+void zmatrix_trans(const int rows, const int cols,
 		    double complex *src, double complex *dst);
 
-void *matrix_trans(const int rows, const int cols,
+void matrix_trans(const int rows, const int cols,
 		   void *src, void *dst, const char flag);

@@ -1,7 +1,7 @@
 
 #include "lapackwrapper.h"
 
-void *dp_inverse(const int m, const int n, double *matrix, double *target) {
+void dp_inverse(const int m, const int n, double *matrix, double *target) {
   int M, N, NRHS, LDA, LDB, RANK, LWORK, INFO;
   double *WORK, *S; 
   double RCOND, WOPT; 
@@ -43,7 +43,7 @@ void *dp_inverse(const int m, const int n, double *matrix, double *target) {
   return NULL;
 }
 
-void *dcopy_matrix(const int m, const int n, 
+void dcopy_matrix(const int m, const int n, 
 		   double *matrix, double *target) {
   char UPLO;
   int M, N, LDA, LDB; 
@@ -88,7 +88,7 @@ double dget_1_norm(const int m, const int n, double *matrix) {
   return ret; 
 }
 
-void *dget_q(const int m, const int n, double *matrix) { 
+void dget_q(const int m, const int n, double *matrix) { 
   /* dgeqrf computes a QR factorization of a real M-by-N Matrix A */
   /**/
   /* dorgqr generates an M-by-N real matrix Q with orthonormal columns */ 
@@ -160,7 +160,7 @@ void *dget_q(const int m, const int n, double *matrix) {
   return NULL;
 }
 
-void *dcalc_sing_val(const int m, const int n, double *sVal, double *matrix) { 
+void dcalc_sing_val(const int m, const int n, double *sVal, double *matrix) { 
   int M, N, LDA, LDU, LDVT, INFO, LWORK;
   double WKOPT; 
   double *WORK, *U, *VT;
@@ -213,7 +213,7 @@ void *dcalc_sing_val(const int m, const int n, double *sVal, double *matrix) {
   return NULL;
 }
 
-void *dcalc_eig_val(const int n, double *matrix, double *eigVal, double *eigVec) {
+void dcalc_eig_val(const int n, double *matrix, double *eigVal, double *eigVec) {
   int N, LDA, LDVL, LDVR, INFO, LWORK;
   double WKOPT; 
   double *WORK; 
@@ -268,7 +268,7 @@ void *dcalc_eig_val(const int n, double *matrix, double *eigVal, double *eigVec)
   return NULL;
 }
 
-void *dmatrix_inverse(const int m, double *matrix) { 
+void dmatrix_inverse(const int m, double *matrix) { 
   int LWORK, INFO, LDA, M; 
   double *WORK; 
   int *IPIV; 
@@ -308,7 +308,7 @@ void *dmatrix_inverse(const int m, double *matrix) {
 }
 
 
-void *zp_inverse(const int m, const int n, double complex *matrix, double complex *target) {
+void zp_inverse(const int m, const int n, double complex *matrix, double complex *target) {
   int M, N, NRHS, LDA, LDB, RANK, LWORK, INFO;
   double complex *WORK;
   double complex *S;
@@ -353,7 +353,7 @@ void *zp_inverse(const int m, const int n, double complex *matrix, double comple
   return NULL;
 }
 
-void *zcopy_matrix(const int m, const int n, 
+void zcopy_matrix(const int m, const int n, 
 		   double complex *matrix, double complex *target) {
   char UPLO;
   int M, N, LDA, LDB;
@@ -436,7 +436,7 @@ void *zget_q(const int m, const int n, double complex *matrix) {
 
 }
 
-void *zcalc_sing_val(const int m, const int n, double *sVal, double complex *matrix) {
+void zcalc_sing_val(const int m, const int n, double *sVal, double complex *matrix) {
   int M, N, LDA, LDU, LDVT, INFO, LWORK;
   double complex WKOPT;
   double complex *WORK, *U, *VT;
@@ -495,8 +495,8 @@ void *zcalc_sing_val(const int m, const int n, double *sVal, double complex *mat
 
 }
 
-void *zcalc_eig_val(const int n, double complex *matrix, double complex *eigVal,
-		    double complex *eigVec) {
+void zcalc_eig_val(const int n, double complex *matrix, double complex *eigVal,
+		   double complex *eigVec) {
   int N, LDA, LDVL, LDVR, INFO, LWORK;
   double complex WKOPT;
   double complex *WORK;
@@ -550,7 +550,7 @@ void *zcalc_eig_val(const int n, double complex *matrix, double complex *eigVal,
   return NULL;
 }
 
-void *zmatrix_inverse(const int m, double complex *matrix) {
+void zmatrix_inverse(const int m, double complex *matrix) {
   int LWORK, INFO, LDA, M;
   double complex *WORK;
   int *IPIV;
@@ -592,7 +592,7 @@ void *zmatrix_inverse(const int m, double complex *matrix) {
 
 
 
-void *p_inverse(const int m, const int n, void *matrix,
+void p_inverse(const int m, const int n, void *matrix,
 		void *target, const char flag) {
 
   if(flag == 'D') {
@@ -604,7 +604,7 @@ void *p_inverse(const int m, const int n, void *matrix,
   return NULL;
 }
 
-void *copy_matrix(const int m, const int n, void *matrix,
+void copy_matrix(const int m, const int n, void *matrix,
 		  void *target, const char flag) {
 
   if(flag == 'D') {
@@ -616,7 +616,7 @@ void *copy_matrix(const int m, const int n, void *matrix,
   return NULL;
 }
 
-void *get_q(const int m, const int n, void *matrix,
+void get_q(const int m, const int n, void *matrix,
 	    const char flag) {
   if(flag == 'D') {
     dget_q(m, n, matrix);
@@ -627,7 +627,7 @@ void *get_q(const int m, const int n, void *matrix,
   return NULL;
 }
 
-void *calc_sing_val(const int m, const int n, double *sVal, void *matrix,
+void calc_sing_val(const int m, const int n, double *sVal, void *matrix,
 		    const char flag) {
   if(flag == 'D') {
     dcalc_sing_val(m, n, sVal, matrix);
@@ -638,7 +638,7 @@ void *calc_sing_val(const int m, const int n, double *sVal, void *matrix,
   return NULL;
 }
 
-void *calc_eig_val(const int m, void *matrix, void *eigVal, void *eigVec,
+void calc_eig_val(const int m, void *matrix, void *eigVal, void *eigVec,
 		   const char flag) {
   if(flag == 'D') {
     dcalc_eig_val(m, matrix, eigVal, eigVec);
@@ -649,7 +649,7 @@ void *calc_eig_val(const int m, void *matrix, void *eigVal, void *eigVec,
   return NULL;
 }
 
-void *matrix_inverse(const int m, void *matrix, const char flag) {
+void matrix_inverse(const int m, void *matrix, const char flag) {
   if (flag == 'D') {
     dmatrix_inverse(m, matrix);
   } else if(flag == 'Z') {

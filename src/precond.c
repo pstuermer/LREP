@@ -38,8 +38,8 @@ void cond_free(struct cond_t *cond) {
   safe_free( cond );
 }
 
-void* sp_setup_precond(struct sp_lrep_t *LREP) {
-  printf("get precond.\n");
+void sp_setup_precond(struct sp_lrep_t *LREP) {
+
   // what do I want to do here?  
   // at end of setup of my LREP setup, I go through the chosen options   
   // of the preconditioner (which currently only allows ConjGrad anyways 
@@ -71,7 +71,7 @@ void* sp_setup_precond(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void* sp_get_diag_precond(struct sp_lrep_t *LREP) { 
+void sp_get_diag_precond(struct sp_lrep_t *LREP) { 
   // do it for both K and M 
   int size = LREP->size;
   coo_t *MDiag, *KDiag;
@@ -107,7 +107,7 @@ void* sp_get_diag_precond(struct sp_lrep_t *LREP) {
   return NULL;
 }
 
-void* de_conj_grad(double *deMatrix, double *dVec, double *sol, 
+void de_conj_grad(double *deMatrix, double *dVec, double *sol, 
 		   const int size, struct rsb_mtx_t *deMatrixDiag) {   
   // solves the symmetric positive definite linear system Ax=b 
   // using the Conjugate Gradient method (with preconditioning)
@@ -186,9 +186,9 @@ void* de_conj_grad(double *deMatrix, double *dVec, double *sol,
   return NULL;
 }
 
-void *sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
-		   double *sol, const int size, 
-		   struct rsb_mtx_t *spMatrixDiag) { 
+void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
+		  double *sol, const int size, 
+		  struct rsb_mtx_t *spMatrixDiag) { 
   // solves the symmetric positive definite linear system Ax=b 
   // using the Conjugate Gradient method (with preconditioning)
   int maxIter;
@@ -272,10 +272,10 @@ void *sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
 } 
 
 
-void *sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,                       
-                          double *solMat, const int size, const int nrhs,                 
-                          struct rsb_mtx_t *spMatrixDiag, const int maxIter,                      
-                          const double tol) {                                                     
+void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,                       
+			 double *solMat, const int size, const int nrhs,                 
+			 struct rsb_mtx_t *spMatrixDiag, const int maxIter,                      
+			 const double tol) {                                                     
   
   // solves the symmetric positive definite linear system AX=B                                    
   // using the block conjugate gradient method (with preconditioning)                             
@@ -368,10 +368,10 @@ void *sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
   return NULL;     
 } 
 
-void *sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
-			  double complex *solMat, const int size, const int nrhs,
-			  struct rsb_mtx_t *spMatrixDiag, const int maxIter,
-			  const double tol) {
+void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
+			 double complex *solMat, const int size, const int nrhs,
+			 struct rsb_mtx_t *spMatrixDiag, const int maxIter,
+			 const double tol) {
 
   // soles the symmetric positive definite linear system AX=B
   // using the breakdown-free block conjugate gradient method

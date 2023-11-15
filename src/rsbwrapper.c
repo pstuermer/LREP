@@ -44,6 +44,42 @@ struct rsb_mtx_t *rsb_mtx_from_coo(coo_t *matrix) {
   return mtxAp;
 }
 
+struct rsb_mtx_t *rsb_mtx_from_coo_sym(coo_t *matrix) {
+  struct rsb_mtx_t *mtxAp = NULL;
+
+  rsb_err_t errval = RSB_ERR_NO_ERROR;
+  const int bs = RSB_DEFAULT_BLOCKING;
+  const int brA = bs, bcA = bs;
+  rsb_type_t dtypeCode = RSB_NUMERICAL_TYPE_DEFAULT;
+  rsb_type_t ztypeCode = RSB_NUMERICAL_TYPE_DOUBLE_COMPLEX;
+
+  if(matrix->flag == 'D')
+    mtxAp = rsb_mtx_alloc_from_coo_const(matrix->dval, matrix->row, matrix->col,
+					 matrix->nnz, dtypeCode, matrix->rows,
+					 matrix->cols, brA, bcA,
+					 RSB_FLAG_DEFAULT_RSB_MATRIX_FLAGS
+					 | RSB_FLAG_DUPLICATES_SUM
+					 | RSB_FLAG_DISCARD_ZEROS
+					 | RSB_FLAG_SYMMETRIC,
+					 &errVal);
+  if(matrix->flag == 'Z')
+    mtxAp = rsb_mtx_alloc_from_coo_const(matrix->dval, matrix->row, matrix->col,
+					 matrix->nnz, ztypeCode, matrix->rows,
+					 matrix->cols, brA, bcA,
+					 RSB_FLAG_DEFAULT_RSB_MATRIX_FLAGS
+					 | RSB_FLAG_DUPLICATES_SUM
+					 | RSB_FLAG_DISCARD_ZEROS
+					 | RSB_FLAG_SYMMETRIC,
+					 &errVal);
+  if((!mtxAp) || (errVal != RSB_ERR_NO_ERROR)) {
+    printf("Error allocating symmetric RSB matrix from coo: %d", errVal);
+    rsb_perror(NULL, errVal);
+  }
+
+  return mtxAp;
+}
+  
+
 void rsb_SPMM(struct rsb_mtx_t *spMatrix, const void *dMatrix,
 	      void *res, int nev, const char flag) {
 
@@ -225,7 +261,7 @@ void rsb_get_prec(struct rsb_mtx_t *spMatrix, void *opdp[2]) {
   }                                                                                     
 }
 
-void* rsb_tune_SPMM(struct rsb_mtx_t *spMatrix, const double *dMatrix, int nev,              
+void rsb_tune_SPMM(struct rsb_mtx_t *spMatrix, const double *dMatrix, int nev,              
                    int size, int tn, const char flag) {
   int tt = 100;                                                                         
   rsb_err_t errVal = RSB_ERR_NO_ERROR;                                                  

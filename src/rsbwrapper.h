@@ -44,7 +44,7 @@ void rsb_SPSM(struct rsb_mtx_t *spMatrix, const void *dMatrix,
 void rsb_SPSV(struct rsb_mtx_t *spMatrix, const void *vec, void *res,
 	      const char flag);
 void rsb_get_prec(struct rsb_mtx_t *spMatrix, void *opdp[2]);
-void* rsb_tune_SPMM(struct rsb_mtx_t *spMatrix, const double *dMatrix, 
+void rsb_tune_SPMM(struct rsb_mtx_t *spMatrix, const double *dMatrix, 
 		   const int nev, const int size, const int tn,
 		   const char flag);
 /*

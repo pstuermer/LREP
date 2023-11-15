@@ -44,7 +44,7 @@ void grid_setup(grid_t *grid) {
   }
 }
 
-void *idxunravel(int *index, int i, grid_t *grid) {
+void idxunravel(int *index, int i, grid_t *grid) {
   if(grid->dim == 1) {
     index[0] = i;
   } else if (grid->dim == 2) {

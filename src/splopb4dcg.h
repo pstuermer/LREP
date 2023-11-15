@@ -35,39 +35,39 @@
 //                       vectors to X&Y
 // *******************************************************************
 
-void *sp_get_search_dird(struct sp_lrep_t *LREP);
-void *sp_get_search_dirz(struct sp_lrep_t *LREP);
-void *sp_get_search_dir(struct sp_lrep_t *LREP);
+void sp_get_search_dird(struct sp_lrep_t *LREP);
+void sp_get_search_dirz(struct sp_lrep_t *LREP);
+void sp_get_search_dir(struct sp_lrep_t *LREP);
 
-void *sp_setup_P(struct sp_lrep_t *LREP);
-void *sp_setup_Q(struct sp_lrep_t *LREP);
+void sp_setup_P(struct sp_lrep_t *LREP);
+void sp_setup_Q(struct sp_lrep_t *LREP);
 
-void *sp_apply_precondd(struct sp_lrep_t *LREP);
-void *sp_apply_precondz(struct sp_lrep_t *LREP);
-void *sp_apply_precond(struct sp_lrep_t *LREP);
+void sp_apply_precondd(struct sp_lrep_t *LREP);
+void sp_apply_precondz(struct sp_lrep_t *LREP);
+void sp_apply_precond(struct sp_lrep_t *LREP);
 
-void *sp_setup_U(struct sp_lrep_t *LREP);
-void *sp_setup_V(struct sp_lrep_t *LREP);
-void *sp_setup_W(struct sp_lrep_t *LREP);
+void sp_setup_U(struct sp_lrep_t *LREP);
+void sp_setup_V(struct sp_lrep_t *LREP);
+void sp_setup_W(struct sp_lrep_t *LREP);
 
-void *sp_setup_Hsrd(struct sp_lrep_t *LREP);
-void *sp_setup_Hsrz(struct sp_lrep_t *LREP);
-void *sp_setup_Hsr(struct sp_lrep_t *LREP);
+void sp_setup_Hsrd(struct sp_lrep_t *LREP);
+void sp_setup_Hsrz(struct sp_lrep_t *LREP);
+void sp_setup_Hsr(struct sp_lrep_t *LREP);
 
-void *sp_sort_eigd(struct sp_lrep_t *LREP);
-void *sp_sort_eigz(struct sp_lrep_t *LREP);
-void *sp_sort_eig(struct sp_lrep_t *LREP);
+void sp_sort_eigd(struct sp_lrep_t *LREP);
+void sp_sort_eigz(struct sp_lrep_t *LREP);
+void sp_sort_eig(struct sp_lrep_t *LREP);
 
-void *sp_split_eig_vec(struct sp_lrep_t *LREP);
-void *sp_compute_eig_vec(struct sp_lrep_t *LREP);
-void *sp_normalize_eig_vec(struct sp_lrep_t *LREP);
+void sp_split_eig_vec(struct sp_lrep_t *LREP);
+void sp_compute_eig_vec(struct sp_lrep_t *LREP);
+void sp_normalize_eig_vec(struct sp_lrep_t *LREP);
 
-void *sp_get_residual_normd(struct sp_lrep_t *LREP);
-void *sp_get_residual_normz(struct sp_lrep_t *LREP);
-void *sp_get_residual_norm(struct sp_lrep_t *LREP);
+void sp_get_residual_normd(struct sp_lrep_t *LREP);
+void sp_get_residual_normz(struct sp_lrep_t *LREP);
+void sp_get_residual_norm(struct sp_lrep_t *LREP);
 
-void *sp_switch_eig_vec(struct sp_lrep_t *LREP);
+void sp_switch_eig_vec(struct sp_lrep_t *LREP);
 
-void *sp_lopb4dcg(struct sp_lrep_t *LREP);
+void sp_lopb4dcg(struct sp_lrep_t *LREP);
 
 

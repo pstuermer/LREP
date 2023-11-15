@@ -227,7 +227,7 @@ struct coo_t *diff_3D(const double *ln, const int *N, const char flag) {
   return diffFin;
 }
 
-void *fourier_diff2(const double lx, const int N, double *diffMatrix) { 
+void fourier_diff2(const double lx, const int N, double *diffMatrix) { 
   double h, work;
   int l = 0;
   h = lx/N;
@@ -276,8 +276,8 @@ void fourier_diff1(const double lx, const int N, double *diffMatrix) {
 }
 	
 
-void *load_wf(double complex *wf, const int N, 
-	      const int factor, char fileName[]) {   
+void load_wf(double complex *wf, const int N, 
+	     const int factor, char fileName[]) {   
   double complex z = 0.0 + I*0.0;
   double buffer = 0.0;
   int counter = 0;
@@ -319,8 +319,8 @@ void *load_wf(double complex *wf, const int N,
   return NULL;
 }
 
-void *load_wf_2C(double complex *wf1, double complex *wf2,
-		 const int N, const int factor, char fileName[]) {
+void load_wf_2C(double complex *wf1, double complex *wf2,
+		const int N, const int factor, char fileName[]) {
   double complex z = 0.0 + I*0.0;
   double buffer = 0.0;
   int counter = 0;
@@ -490,8 +490,8 @@ double complex *cut_wf(double complex *wf, const int *N, const int dim) {
   // get mu
   */
 
-void *setup_trap(coo_t *cooTrap, const int *N, const double *param, grid_t *grid,
-		 const int dim, const int trapChoice) { 
+void setup_trap(coo_t *cooTrap, const int *N, const double *param, grid_t *grid,
+		const int dim, const int trapChoice) { 
   int index[dim];
   
   if(dim == 1) {
@@ -588,9 +588,9 @@ double trap_3D(const double *param, grid_t *sys, int *index, const int trapChoic
   return 0.0;
 }   
 
-void *setup_Uint(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,
-		 const int dim, const double mu, const double *intParam,
-		 const int intChoice, const int sysComp, int comp) {
+void setup_Uint(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,
+		const int dim, const double mu, const double *intParam,
+		const int intChoice, const int sysComp, int comp) {
   if(sysComp == SYS_ONE_COMPONENT) {
     setup_Uint1C(cooUint, apsi1, N, dim, mu, intParam, intChoice);
   } else if (sysComp == SYS_TWO_COMPONENT) {
@@ -600,8 +600,8 @@ void *setup_Uint(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,
   return NULL;
 }
 
-void *setup_Uint1C(coo_t *cooUint, double *apsi, const int *N, const int dim,
-		   const double mu, const double *intParam, const int intChoice){
+void setup_Uint1C(coo_t *cooUint, double *apsi, const int *N, const int dim,
+		  const double mu, const double *intParam, const int intChoice){
   double dapsi;
   int size = 1;
    for(int i = 0; i < dim; i++)
@@ -614,9 +614,9 @@ void *setup_Uint1C(coo_t *cooUint, double *apsi, const int *N, const int dim,
   return NULL;
 }
 
-void *setup_Uint2C(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,
-		   const int dim, const double mu, const double *intParam,
-		   const int intChoice, int comp) {
+void setup_Uint2C(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,
+		  const int dim, const double mu, const double *intParam,
+		  const int intChoice, int comp) {
   int size = 1;
   double dapsi1, dapsi2;
   for(int i = 0; i < dim; i++) 
@@ -696,9 +696,9 @@ double d_Uint2C(double apsi1, double apsi2, const double mu,
   return 0.0;
 }
 
-void *setup_Bint(coo_t *coo_Bint, double *apsi1, double *apsi2,
-		 const int *N, const int dim, const double *intParam,
-		 const int intChoice, const int sysComp, int comp) {
+void setup_Bint(coo_t *coo_Bint, double *apsi1, double *apsi2,
+		const int *N, const int dim, const double *intParam,
+		const int intChoice, const int sysComp, int comp) {
   if(sysComp == SYS_ONE_COMPONENT)
     setup_Bint1C(coo_Bint, apsi1, N, dim, intParam, intChoice);
   else if(sysComp == SYS_TWO_COMPONENT)
@@ -707,8 +707,8 @@ void *setup_Bint(coo_t *coo_Bint, double *apsi1, double *apsi2,
   return NULL;
 }
 
-void *setup_Bint1C(coo_t *coo_Bint, double *apsi, const int *N,
-		   const int dim, const double *intParam, const int intChoice) {
+void setup_Bint1C(coo_t *coo_Bint, double *apsi, const int *N,
+		  const int dim, const double *intParam, const int intChoice) {
   int size = 1;
   double dapsi;
   
@@ -723,9 +723,9 @@ void *setup_Bint1C(coo_t *coo_Bint, double *apsi, const int *N,
   return NULL;
 }
 
-void *setup_Bint2C(coo_t *coo_Bint, double* apsi1, double *apsi2,
-		   const int *N, const int dim, const double *intParam, 
-		   const int intChoice, int comp) {
+void setup_Bint2C(coo_t *coo_Bint, double* apsi1, double *apsi2,
+		  const int *N, const int dim, const double *intParam, 
+		  const int intChoice, int comp) {
   int size = 1;
   double dapsi1, dapsi2;
   for(int i = 0; i < dim; i++)
@@ -863,8 +863,8 @@ double complex z_Bint(double complex psi, const double *intParam,
 }
 */
 
-void *setup_C(coo_t *cooC, double *apsi1, double *apsi2, const int *N,
-	      const int dim, const double *intParam, const int intChoice) {
+void setup_C(coo_t *cooC, double *apsi1, double *apsi2, const int *N,
+	     const int dim, const double *intParam, const int intChoice) {
   int size = 1;
   double dapsi;
   for(int i = 0; i < dim; i++)
@@ -896,9 +896,9 @@ double d_Cint(double dapsi, double apsi1, double apsi2,
   return 0.0;
 }
 
-void *setup_KM1C(coo_t *K, coo_t *diff, coo_t *trap, coo_t *uint,   
-		 coo_t *B1, const char mode, const int nnz,
-		 const char flag) {  
+void setup_KM1C(coo_t *K, coo_t *diff, coo_t *trap, coo_t *uint,   
+		coo_t *B1, const char mode, const int nnz,
+		const char flag) {  
 
   coo_t *work1, *work2;
   work1 = coo_malloc(nnz, trap->rows, trap->cols, flag);
@@ -922,9 +922,9 @@ void *setup_KM1C(coo_t *K, coo_t *diff, coo_t *trap, coo_t *uint,
   return NULL;
 }
 
-void *setup_KM2C(coo_t *KM, coo_t *diff, coo_t* trap, coo_t *Uint1, coo_t *Uint2,
-		 coo_t *B1, coo_t *B2, coo_t *C, const char mode, const int nnz,
-		 const char flag) {
+void setup_KM2C(coo_t *KM, coo_t *diff, coo_t* trap, coo_t *Uint1, coo_t *Uint2,
+		coo_t *B1, coo_t *B2, coo_t *C, const char mode, const int nnz,
+		const char flag) {
 
   coo_t *work1, *work2, *work3, *work4, *workM1, *workM2;
   work1 = coo_malloc(nnz, trap->rows, trap->cols, flag);
@@ -986,7 +986,7 @@ void *setup_KM2C(coo_t *KM, coo_t *diff, coo_t* trap, coo_t *Uint1, coo_t *Uint2
 }
 
 
-void *init_eig_vecd(const int N, const int nev, double *vec, double low, double high) {
+void init_eig_vecd(const int N, const int nev, double *vec, double low, double high) {
   
   for(int i = 0;i < nev;i++) {
     for(int j = 0;j < N;j++) {
@@ -997,8 +997,8 @@ void *init_eig_vecd(const int N, const int nev, double *vec, double low, double 
   return NULL;
 }
 
-void *init_eig_vecz(const int N, const int nev, double complex *vec,
-		    double low, double high) {
+void init_eig_vecz(const int N, const int nev, double complex *vec,
+		   double low, double high) {
   for(int i = 0; i < nev; i++) {
     for(int j = 0; j < N; j++) {
       vec[j+i*N] = CMPLX(real_rand(low,high),0.0);
@@ -1009,8 +1009,8 @@ void *init_eig_vecz(const int N, const int nev, double complex *vec,
   return NULL;
 }
 
-void *init_eig_vec(const int N, const int nev, void *vec,
-		   double low, double high, const char flag) {
+void init_eig_vec(const int N, const int nev, void *vec,
+		  double low, double high, const char flag) {
 
   if(flag == 'D') {
     init_eig_vecd(N, nev, vec, low, high);
