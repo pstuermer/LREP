@@ -462,7 +462,7 @@ double coo_1norm(coo_t *matrix) {
 
   for(int i = 0; i < matrix->nnz; i++) {
     if(matrix->flag == 'D') {
-      work[matrix->col[i]] += abs(matrix->dval[i]);
+      work[matrix->col[i]] += fabs(matrix->dval[i]);
     } else if(matrix->flag == 'Z') {
       work[matrix->col[i]] += cabs(matrix->zval[i]);
     }

@@ -42,7 +42,7 @@ void sp_get_search_dird(struct sp_lrep_t *LREP) {
   safe_free( transX );
   safe_free( transY );
 
-  return NULL;
+  
 }
 
 void sp_get_search_dirz(struct sp_lrep_t *LREP) {
@@ -71,7 +71,7 @@ void sp_get_search_dirz(struct sp_lrep_t *LREP) {
 
     // calculate the denominator
     denom = zdot_product(n, &transX[i*n], &transX[i*n]);
-    denom = 2*fabs(denom);
+    denom = 2*cabs(denom);
     ((double complex *)LREP->eigVal)[i+i*sizeSub] = (num1 + num2)/denom;
   }
 
@@ -79,7 +79,7 @@ void sp_get_search_dirz(struct sp_lrep_t *LREP) {
   safe_free( transX );
   safe_free( transY );
 
-  return NULL;
+  
 }
 
 void sp_get_search_dir(struct sp_lrep_t *LREP) {
@@ -89,7 +89,7 @@ void sp_get_search_dir(struct sp_lrep_t *LREP) {
     sp_get_search_dirz(LREP);
   }
 
-  return NULL;
+  
 }
 
 void sp_setup_P(struct sp_lrep_t *LREP) {    
@@ -102,12 +102,12 @@ void sp_setup_P(struct sp_lrep_t *LREP) {
   // calculate K*X-Y*diag(search_dir) 
   rsb_SPMM_sub(LREP->K, LREP->X, LREP->P, sizeSub, LREP->flag);   
   
-  return NULL;    
+      
 }  
 
 void sp_setup_Q(struct sp_lrep_t *LREP) {    
-  const const int n = LREP->size;  
-  const const int sizeSub = LREP->sizeSub;   
+  const int n = LREP->size;  
+  const int sizeSub = LREP->sizeSub;   
    
   // calculate X*diag(search_dir)
   gemm_NN(n, sizeSub, sizeSub, LREP->X, LREP->eigVal, LREP->Q, LREP->flag);
@@ -115,7 +115,7 @@ void sp_setup_Q(struct sp_lrep_t *LREP) {
   // calculate M*Y-X*diag(search_dir) 
   rsb_SPMM_sub(LREP->M, LREP->Y, LREP->Q, sizeSub, LREP->flag);   
   
-  return NULL;    
+      
 } 
 
 void sp_apply_precondd(struct sp_lrep_t *LREP) { 
@@ -178,7 +178,7 @@ void sp_apply_precondd(struct sp_lrep_t *LREP) {
     exit(1); 
   }
    
-  return NULL;    
+      
 }
 
 void sp_apply_precondz(struct sp_lrep_t *LREP) {
@@ -242,7 +242,7 @@ void sp_apply_precondz(struct sp_lrep_t *LREP) {
     exit(1);
   }
 
-  return NULL;
+  
 }
 
 void sp_apply_precond(struct sp_lrep_t *LREP) {
@@ -252,7 +252,7 @@ void sp_apply_precond(struct sp_lrep_t *LREP) {
     sp_apply_precondz(LREP);
   }
 
-  return NULL;
+  
 }
 
 void sp_setup_U(struct sp_lrep_t *LREP) {    
@@ -285,7 +285,7 @@ void sp_setup_U(struct sp_lrep_t *LREP) {
     }   
   }
   
-  return NULL;    
+      
 }
 
 void sp_setup_V(struct sp_lrep_t *LREP) {    
@@ -318,7 +318,7 @@ void sp_setup_V(struct sp_lrep_t *LREP) {
     }   
   }
   
-  return NULL;    
+      
 }
 
 void sp_setup_W(struct sp_lrep_t *LREP) {    
@@ -333,7 +333,7 @@ void sp_setup_W(struct sp_lrep_t *LREP) {
   
   gemm_TN(sizeSub, sizeSub, n, LREP->U, LREP->V, LREP->W, LREP->flag);
   
-  return NULL;    
+      
 }
 
 void sp_setup_Hsrd(struct sp_lrep_t *LREP) {  
@@ -386,7 +386,7 @@ void sp_setup_Hsrd(struct sp_lrep_t *LREP) {
   safe_free( work2 );  
   safe_free( work3 ); 
   
-  return NULL;
+  
 }
 
 void sp_setup_Hsrz(struct sp_lrep_t *LREP) {
@@ -435,7 +435,7 @@ void sp_setup_Hsrz(struct sp_lrep_t *LREP) {
   safe_free( work2 );
   safe_free( work3 );
 
-  return NULL;
+  
 }
 
 void sp_setup_Hsr(struct sp_lrep_t *LREP) {
@@ -445,7 +445,7 @@ void sp_setup_Hsr(struct sp_lrep_t *LREP) {
     sp_setup_Hsrz(LREP);
   }
 
-  return NULL;
+  
 }
 
 void sp_sort_eigd(struct sp_lrep_t *LREP) {   
@@ -493,7 +493,7 @@ void sp_sort_eigd(struct sp_lrep_t *LREP) {
     }   
   }
   matrix_trans(sizeSub, mult*sizeSub, eVecTSort, LREP->eVecSort, LREP->flag); 
-  return NULL;    
+      
 }
 
 void sp_sort_eigz(struct sp_lrep_t *LREP) {
@@ -601,7 +601,7 @@ void sp_sort_eigz(struct sp_lrep_t *LREP) {
     }
 
     if((counter == 2 && prevCounter) || (counter == 2 && !i)) {
-      if(abs(creal(LREP->eValsr[2*i])) > abs(cimag(LREP->eValsr[2*i]))) {
+      if(fabs(creal(LREP->eValsr[2*i])) > fabs(cimag(LREP->eValsr[2*i]))) {
 	if(creal(LREP->eValsr[2*i]) > creal(LREP->eValsr[2*i+1])) {
 	  arrSort[i] = arrSortAmp[2*i];
 	  LREP->eValSort[i] = LREP->eValsr[2*i];
@@ -635,7 +635,7 @@ void sp_sort_eigz(struct sp_lrep_t *LREP) {
   safe_free( eVecT );
   safe_free( eVecTSort );
 
-  return NULL;
+  
 }
 
 void sp_sort_eig(struct sp_lrep_t *LREP) {
@@ -645,7 +645,7 @@ void sp_sort_eig(struct sp_lrep_t *LREP) {
     sp_sort_eigz(LREP);
   }
 
-  return NULL;
+  
 }
 
 void sp_split_eig_vec(struct sp_lrep_t *LREP) {    
@@ -665,7 +665,7 @@ void sp_split_eig_vec(struct sp_lrep_t *LREP) {
     }   
   }
    
-  return NULL;    
+      
 }
 
 void sp_compute_eig_vec(struct sp_lrep_t *LREP) {  
@@ -702,7 +702,7 @@ void sp_compute_eig_vec(struct sp_lrep_t *LREP) {
     safe_free( workz );
   }
    
-  return NULL;    
+      
 }
 
 
@@ -764,7 +764,7 @@ void sp_normalize_eig_vec(struct sp_lrep_t *LREP) {
     safe_free( transYz );
   }
 
-  return NULL;    
+      
 }
 
 void sp_get_residual_normd(struct sp_lrep_t *LREP) {
@@ -810,7 +810,7 @@ void sp_get_residual_normd(struct sp_lrep_t *LREP) {
   safe_free( work2 );  
   safe_free( transX );
   safe_free( transY );
-  return NULL;    
+      
 }
 
 void sp_get_residual_normz(struct sp_lrep_t *LREP) {
@@ -856,7 +856,7 @@ void sp_get_residual_normz(struct sp_lrep_t *LREP) {
   safe_free( work2 );
   safe_free( transX );
   safe_free( transY );
-  return NULL;
+  
 }
 
 void sp_get_residual_norm(struct sp_lrep_t *LREP) {
@@ -866,7 +866,7 @@ void sp_get_residual_norm(struct sp_lrep_t *LREP) {
     sp_get_residual_normz(LREP);
   }
 
-  return NULL;
+  
 }
 
 void sp_switch_eig_vec(struct sp_lrep_t *LREP) {
@@ -907,7 +907,7 @@ void sp_switch_eig_vec(struct sp_lrep_t *LREP) {
     safe_free( workd );
   }
    
-  return NULL;    
+      
 }
 
 
@@ -997,5 +997,4 @@ void sp_lopb4dcg(sp_lrep_t *LREP) {
 
   }
 
-  return NULL;
 }

@@ -35,7 +35,6 @@ void sub_vec(const int n, void *vec1, const void *vec2,
     cblas_zaxpy(n, DA, vec2, INCX, vec1, INCY);
   }
  
-  return NULL;  
 }
  
 void add_vec(const int n, void *vec1, const void *vec2,
@@ -55,7 +54,6 @@ void add_vec(const int n, void *vec1, const void *vec2,
     cblas_zaxpy(n, DA, vec2, INCX, vec1, INCY);
   }
  
-  return NULL;  
 }
  
 void copy_vec(const int n, const void *vec, void *target,
@@ -70,10 +68,9 @@ void copy_vec(const int n, const void *vec, void *target,
     cblas_zcopy(n, vec, INCX, target, INCY);
   }
  
-  return NULL;  
 }
  
-void *scale_vec(const int n, void *vec, double alpha,
+void scale_vec(const int n, void *vec, double alpha,
 		const char flag) { 
   int INCX;  
   INCX = 1;  
@@ -84,7 +81,6 @@ void *scale_vec(const int n, void *vec, double alpha,
     cblas_zdscal(n, alpha, vec, INCX);
   }
  
-  return NULL;  
 }
 
 void zscale_vec(const int n, double complex *vec,
@@ -92,10 +88,8 @@ void zscale_vec(const int n, double complex *vec,
   int INCX;
   INCX = 1;
   
-
   cblas_zscal(n, &alpha, vec, INCX);
 
-  return NULL;
 }
  
 double ddot_product(const int n, double *vec1, double *vec2) {
@@ -198,7 +192,6 @@ void gemv_N(const int colA, const int rowA, const void *matrix,
 		matrix, lda, vec, incx, zero, out, incy);
   }
 
-  return NULL;  
 }
  
 void gemv_T(const int colA, const int rowA, const void *matrix,
@@ -223,7 +216,6 @@ void gemv_T(const int colA, const int rowA, const void *matrix,
 		matrix, lda, vec, incx, zero, out, incy);
   }
 
-  return NULL;  
 }
 /*
 void *zgemv_N(const int colA, const int rowA,
@@ -295,7 +287,6 @@ void gemm_NN(const int rowA, const int rowB, const int colA,
 		one, matrixA, lda, matrixB, ldb, zero, matrixC, ldc);
   }
 
-  return NULL;  
 }
  
 void gemm_NT(const int rowA, const int rowB, const int colA, 
@@ -321,7 +312,6 @@ void gemm_NT(const int rowA, const int rowB, const int colA,
 		one, matrixA, lda, matrixB, ldb, zero, matrixC, ldc);
   }
 
-  return NULL;  
 }
  
 void gemm_TN(const int rowA, const int colB, const int colA,
@@ -347,7 +337,6 @@ void gemm_TN(const int rowA, const int colB, const int colA,
 		one, matrixA, lda, matrixB, ldb, zero, matrixC, ldc);
   }
 
-  return NULL;  
 }
 
 void gemm_TT(const int rowA, const int rowB, const int colA,
@@ -373,10 +362,9 @@ void gemm_TT(const int rowA, const int rowB, const int colA,
 		one, matrixA, lda, matrixB, ldb, zero, matrixC, ldc);
   }
 
-  return NULL;  
 }
  
-void *gemm_NN_s(const int rowA, const int rowB, const int colA, 
+void gemm_NN_s(const int rowA, const int rowB, const int colA, 
 		const void *matrixA, const void *matrixB,
 		void *matrixC, const char flag) {
   int lda, ldb, ldc;  
@@ -398,7 +386,7 @@ void *gemm_NN_s(const int rowA, const int rowB, const int colA,
     cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, rowA, rowB, colA,
 		one, matrixA, lda, matrixB, ldb, minus, matrixC, ldc);
   }
-  return NULL;  
+
 }
 
 void gemm_NN_scal_add(const int rowA, const int colB, const int colA,                            
@@ -425,7 +413,7 @@ void gemm_NN_scal_add(const int rowA, const int colB, const int colA,
     cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, rowA, colB, colA,                      
                 dalpha, matrixA, lda, matrixB, ldb, dbeta, matrixC, ldc);                         
   }                                                                                               
-  return NULL;                                                                                    
+
 }
  
 void dmatrix_trans(const int rows, const int cols, 
@@ -439,7 +427,6 @@ void dmatrix_trans(const int rows, const int cols,
     dst[k] = src[cols*j+i]; 
   } 
  
-  return NULL;  
 }
 
 void zmatrix_trans(const int rows, const int cols,
@@ -452,7 +439,6 @@ void zmatrix_trans(const int rows, const int cols,
     dst[k] = src[cols*j+i];
   }
 
-  return NULL;
 }
 
 void matrix_trans(const int rows, const int cols,
@@ -464,5 +450,4 @@ void matrix_trans(const int rows, const int cols,
     zmatrix_trans(rows, cols, src, dst);
   }
 
-  return NULL;
 }

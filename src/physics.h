@@ -54,8 +54,8 @@ void load_wf_2C(double complex *wf1, double complex *wf2,
 		 const int N, const int factor, char fileName[]);
 double complex *get_psi_sq(double complex *wf, const int N);
 double complex *get_ccpsi_sq(double complex *wf, const int N);
-double get_apsi(double complex *wf, const int N);
-double cut_apsi(double *apsi, const int *N, const int dim);
+double *get_apsi(double complex *wf, const int N);
+double *cut_apsi(double *apsi, const int *N, const int dim);
 double complex *cut_wf(double complex *wf, const int *N, const int dim);
 
 

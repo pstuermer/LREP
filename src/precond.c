@@ -68,7 +68,7 @@ void sp_setup_precond(struct sp_lrep_t *LREP) {
     exit(1);
   }
   
-  return NULL;
+  
 }
 
 void sp_get_diag_precond(struct sp_lrep_t *LREP) { 
@@ -104,7 +104,7 @@ void sp_get_diag_precond(struct sp_lrep_t *LREP) {
   coo_free( MDiag );
   safe_free( M );
   
-  return NULL;
+  
 }
 
 void de_conj_grad(double *deMatrix, double *dVec, double *sol, 
@@ -130,7 +130,7 @@ void de_conj_grad(double *deMatrix, double *dVec, double *sol,
     err = 0.0;
     memset(sol, 0, size*sizeof(double));
     
-    return NULL;
+    
   }
   
   double *r, *z, *p;
@@ -149,7 +149,7 @@ void de_conj_grad(double *deMatrix, double *dVec, double *sol,
   err = sqrt(ddot_product(size, r, r))/bNorm2;
   
   if (err <= tol) 
-    return NULL;
+    
 
   for (int i = 0;i < maxIter;i++) { 
     rsb_SPMV(deMatrixDiag, r, z, flag);
@@ -173,7 +173,7 @@ void de_conj_grad(double *deMatrix, double *dVec, double *sol,
     err = sqrt(ddot_product(size, r, r))/bNorm2;
     
     if (err <= tol)    
-      return NULL;
+      
     
     
     rho1 = rho;
@@ -183,7 +183,7 @@ void de_conj_grad(double *deMatrix, double *dVec, double *sol,
   safe_free( z );
   safe_free( p );
   
-  return NULL;
+  
 }
 
 void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
@@ -211,7 +211,7 @@ void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
     err = 0.0;
     memset(sol, 0, size*sizeof(double));
     
-    return NULL;
+    
   }
   
   double *r, *z, *p;
@@ -231,7 +231,7 @@ void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
 
   
   if (err <= tol) 
-    return NULL;
+    
   for(int i = 0;i < maxIter;i++) {
     rsb_SPVM(spMatrixDiag, r, z, flag);
     rho = ddot_product(size, r, z);
@@ -256,7 +256,7 @@ void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
 
     if (err <= tol) {
       printf("%d\n", i);
-      return NULL;
+      
     }
     rho1 = rho;
   }
@@ -268,7 +268,7 @@ void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
 
 
    
-  return NULL;
+  
 } 
 
 
@@ -299,7 +299,7 @@ void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
     err = 0.0;
     memset(solMat, 0, size*nrhs*sizeof(double));
 
-    return NULL;
+    
   }
                                       
   double *r, *z, *p;          
@@ -319,7 +319,7 @@ void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
   err = matrix_norm(size, nrhs, r, 'F', flag)/BNorm2;                                             
                                                                                                   
   if(err <= tol)
-    return NULL;
+    
   
   for(int i = 0; i < maxIter; i++) {
 
@@ -353,8 +353,7 @@ void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
     err = matrix_norm(size, nrhs, r, 'F', flag)/BNorm2;
                                                                                                   
     if (err <= tol)
-      return NULL; 
-                   
+      break;                   
   }                
 
   safe_free( r );
@@ -365,7 +364,7 @@ void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
   safe_free( beta ); 
   safe_free( rho );
                    
-  return NULL;     
+       
 } 
 
 void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
@@ -401,7 +400,7 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
     safe_free( q );
     safe_free( beta );
 
-    return NULL;
+    
   }
 
   double complex *r, *z, *p;
@@ -431,7 +430,7 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
     safe_free( q );
     safe_free( work );
     safe_free( work1 );
-    return NULL;
+    
   }
 
   for(int i = 0; i < maxIter; i++) {
@@ -476,7 +475,7 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
       safe_free( q );
       safe_free( work );
       safe_free( work1 );
-      return NULL;
+      
     }
   }
 
@@ -490,5 +489,4 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
   safe_free( work );
   safe_free( work1 );
 
-  return NULL;
 }

@@ -40,7 +40,7 @@ void dp_inverse(const int m, const int n, double *matrix, double *target) {
   safe_free( transMatrix ); 
   safe_free( WORK ); 
   
-  return NULL;
+  
 }
 
 void dcopy_matrix(const int m, const int n, 
@@ -62,7 +62,7 @@ void dcopy_matrix(const int m, const int n,
   
   //free( awork );
   
-  return NULL;
+  
 }
 
 double dget_1_norm(const int m, const int n, double *matrix) {
@@ -157,7 +157,7 @@ void dget_q(const int m, const int n, double *matrix) {
   safe_free( WORK );
   safe_free( TAU );
   
-  return NULL;
+  
 }
 
 void dcalc_sing_val(const int m, const int n, double *sVal, double *matrix) { 
@@ -210,7 +210,7 @@ void dcalc_sing_val(const int m, const int n, double *sVal, double *matrix) {
   safe_free( WORK ); 
   safe_free( IWORK );
   
-  return NULL;
+  
 }
 
 void dcalc_eig_val(const int n, double *matrix, double *eigVal, double *eigVec) {
@@ -265,7 +265,7 @@ void dcalc_eig_val(const int n, double *matrix, double *eigVal, double *eigVec) 
   safe_free( VR ); 
   safe_free( transMatrix );
   safe_free( WORK ); 
-  return NULL;
+  
 }
 
 void dmatrix_inverse(const int m, double *matrix) { 
@@ -304,7 +304,7 @@ void dmatrix_inverse(const int m, double *matrix) {
   safe_free( IPIV ); 
   safe_free( WORK ); 
   
-  return NULL;
+  
 }
 
 
@@ -350,7 +350,7 @@ void zp_inverse(const int m, const int n, double complex *matrix, double complex
   safe_free( transMatrix );
   safe_free( WORK );
   
-  return NULL;
+  
 }
 
 void zcopy_matrix(const int m, const int n, 
@@ -366,10 +366,10 @@ void zcopy_matrix(const int m, const int n,
   
   zlacpy_(&UPLO, &M, &N, matrix, &LDA, target, &LDB);
 
-  return NULL;
+  
 }
 
-void *zget_q(const int m, const int n, double complex *matrix) {
+void zget_q(const int m, const int n, double complex *matrix) {
   // zgeqrf computes a QR factorization of a real M-by-N matrix A
   //
   // zorgqr generates an M-by-N real matrix Q with orthonormal columns
@@ -432,7 +432,7 @@ void *zget_q(const int m, const int n, double complex *matrix) {
   safe_free( WORK );
   safe_free( TAU );
 
-  return NULL;
+  
 
 }
 
@@ -491,7 +491,7 @@ void zcalc_sing_val(const int m, const int n, double *sVal, double complex *matr
   safe_free( WORK );
   safe_free( IWORK );
 
-  return NULL;
+  
 
 }
 
@@ -547,7 +547,7 @@ void zcalc_eig_val(const int n, double complex *matrix, double complex *eigVal,
   safe_free( transMatrix );
   safe_free( WORK );
   safe_free( RWORK );
-  return NULL;
+  
 }
 
 void zmatrix_inverse(const int m, double complex *matrix) {
@@ -586,8 +586,7 @@ void zmatrix_inverse(const int m, double complex *matrix) {
   safe_free( transMatrix );
   safe_free( IPIV );
   safe_free( WORK );
-
-  return NULL;
+  
 }
 
 
@@ -600,8 +599,7 @@ void p_inverse(const int m, const int n, void *matrix,
   } else if (flag == 'Z') {
     zp_inverse(m, n, matrix, target);
   }
-
-  return NULL;
+  
 }
 
 void copy_matrix(const int m, const int n, void *matrix,
@@ -612,8 +610,7 @@ void copy_matrix(const int m, const int n, void *matrix,
   } else if(flag == 'Z') {
     zcopy_matrix(m, n, matrix, target);
   }
-
-  return NULL;
+  
 }
 
 void get_q(const int m, const int n, void *matrix,
@@ -623,8 +620,7 @@ void get_q(const int m, const int n, void *matrix,
   } else if(flag == 'Z') {
     zget_q(m, n, matrix);
   }
-
-  return NULL;
+  
 }
 
 void calc_sing_val(const int m, const int n, double *sVal, void *matrix,
@@ -634,8 +630,7 @@ void calc_sing_val(const int m, const int n, double *sVal, void *matrix,
   } else if(flag =='Z') {
     zcalc_sing_val(m, n, sVal, matrix);
   }
-
-  return NULL;
+  
 }
 
 void calc_eig_val(const int m, void *matrix, void *eigVal, void *eigVec,
@@ -645,8 +640,7 @@ void calc_eig_val(const int m, void *matrix, void *eigVal, void *eigVec,
   } else if(flag == 'Z') {
     zcalc_eig_val(m, matrix, eigVal, eigVec);
   }
-
-  return NULL;
+  
 }
 
 void matrix_inverse(const int m, void *matrix, const char flag) {
@@ -656,7 +650,6 @@ void matrix_inverse(const int m, void *matrix, const char flag) {
     zmatrix_inverse(m, matrix);
   }
 
-  return NULL;
 }
 
 double z_norm(const int m, const int n, double complex *matrix, char NORM) {                      

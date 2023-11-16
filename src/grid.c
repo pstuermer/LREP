@@ -30,7 +30,6 @@ void grid_free(grid_t *grid) {
   safe_free( grid -> xn );
   safe_free( grid );
 
-  grid = NULL;
 }
 
 void grid_setup(grid_t *grid) {
@@ -55,5 +54,4 @@ void idxunravel(int *index, int i, grid_t *grid) {
     index[2] = i % ((grid->N[0])*(grid->N[1]-1));
     index[1] = (i - index[0] - index[2]*(grid->N[0])*(grid->N[1]))/(grid->N[0]-1);
   }
-  return NULL;
 }

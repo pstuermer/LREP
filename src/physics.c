@@ -249,7 +249,6 @@ void fourier_diff2(const double lx, const int N, double *diffMatrix) {
       diffMatrix[(j-1)+(n-1)*N] *= -0.25;
     }   
   } 
-  return NULL;
 }
 
 void fourier_diff1(const double lx, const int N, double *diffMatrix) {
@@ -316,7 +315,6 @@ void load_wf(double complex *wf, const int N,
   }
 
   safe_free( tempWf );
-  return NULL;
 }
 
 void load_wf_2C(double complex *wf1, double complex *wf2,
@@ -373,7 +371,7 @@ void load_wf_2C(double complex *wf1, double complex *wf2,
   safe_free( tempWf1 );
   safe_free( tempWf2 );
 
-  return NULL;
+
 }
   
 double *get_apsi(double complex *wf, const int N) { 
@@ -528,7 +526,7 @@ void setup_trap(coo_t *cooTrap, const int *N, const double *param, grid_t *grid,
     printf("Dimensionality error in V_trap.\n");
     perror(0);
   } 
-  return NULL;
+
 }   
 
 double trap_1D(const double *param, grid_t *sys, int *index, const int trapChoice) {  
@@ -597,7 +595,6 @@ void setup_Uint(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,
     setup_Uint2C(cooUint, apsi1, apsi2, N, dim, mu, intParam, intChoice, comp);
   }
 
-  return NULL;
 }
 
 void setup_Uint1C(coo_t *cooUint, double *apsi, const int *N, const int dim,
@@ -611,7 +608,6 @@ void setup_Uint1C(coo_t *cooUint, double *apsi, const int *N, const int dim,
     coo_insert(cooUint, d_Uint1C(dapsi, mu, intParam, intChoice), 0.0, i, i);
   }
 
-  return NULL;
 }
 
 void setup_Uint2C(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,
@@ -628,7 +624,6 @@ void setup_Uint2C(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,
 	       0.0, i, i);
   }
 
-  return NULL;
 }
 
 
@@ -704,7 +699,6 @@ void setup_Bint(coo_t *coo_Bint, double *apsi1, double *apsi2,
   else if(sysComp == SYS_TWO_COMPONENT)
     setup_Bint2C(coo_Bint, apsi1, apsi2, N, dim, intParam, intChoice, comp);
 
-  return NULL;
 }
 
 void setup_Bint1C(coo_t *coo_Bint, double *apsi, const int *N,
@@ -720,7 +714,6 @@ void setup_Bint1C(coo_t *coo_Bint, double *apsi, const int *N,
     coo_insert(coo_Bint, d_Bint1C(dapsi, intParam, intChoice), 0.0, i, i);
   }
 
-  return NULL;
 }
 
 void setup_Bint2C(coo_t *coo_Bint, double* apsi1, double *apsi2,
@@ -738,7 +731,6 @@ void setup_Bint2C(coo_t *coo_Bint, double* apsi1, double *apsi2,
 	       0.0, i, i);
   }
 
-  return NULL;
 }
 
 /*
@@ -807,9 +799,9 @@ double d_Bint1C(double apsi, const double *intParam, const int intChoice) {
     } else {  
       printf("Invalid Uintchoice.\n");
       perror(0);
-    } 
- 
-  return 0.0;
+    }
+
+    return 0.0;
 } 
 
 double d_Bint2C(double apsi1, double apsi2, const double *intParam,
@@ -875,7 +867,6 @@ void setup_C(coo_t *cooC, double *apsi1, double *apsi2, const int *N,
 	       0.0, i, i);
   }
 
-  return NULL;
 }
 
 double d_Cint(double dapsi, double apsi1, double apsi2, 
@@ -919,7 +910,6 @@ void setup_KM1C(coo_t *K, coo_t *diff, coo_t *trap, coo_t *uint,
   coo_free( work1 );
   coo_free( work2 );
   
-  return NULL;
 }
 
 void setup_KM2C(coo_t *KM, coo_t *diff, coo_t* trap, coo_t *Uint1, coo_t *Uint2,
@@ -982,7 +972,6 @@ void setup_KM2C(coo_t *KM, coo_t *diff, coo_t* trap, coo_t *Uint1, coo_t *Uint2,
   coo_free( workM1 );
   coo_free( workM2 );
 
-  return NULL;
 }
 
 
@@ -994,7 +983,6 @@ void init_eig_vecd(const int N, const int nev, double *vec, double low, double h
     }
   }
   
-  return NULL;
 }
 
 void init_eig_vecz(const int N, const int nev, double complex *vec,
@@ -1006,7 +994,6 @@ void init_eig_vecz(const int N, const int nev, double complex *vec,
     } 
   }
 
-  return NULL;
 }
 
 void init_eig_vec(const int N, const int nev, void *vec,
@@ -1018,7 +1005,6 @@ void init_eig_vec(const int N, const int nev, void *vec,
     init_eig_vecz(N, nev, vec, low, high);
   }
 
-  return NULL;
 }
 /*
 void add_mode2C(const int dim, const int N[dim], double complex *mode,
