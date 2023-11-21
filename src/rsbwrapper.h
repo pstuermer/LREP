@@ -28,6 +28,7 @@
 
 void rsb_init(const int rsbTune);
 struct rsb_mtx_t *rsb_mtx_from_coo(coo_t *matrix);
+struct rsb_mtx_t *rsb_mtx_from_coo_sym(coo_t *matrix);
 void rsb_SPMM(struct rsb_mtx_t *spMatrix, const void *dMatrix,
 	      void *res, const int nev, const char flag);
 void rsb_SPMM_sub(struct rsb_mtx_t *spMatrix, const void *dMatrix,

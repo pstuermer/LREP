@@ -13,10 +13,10 @@ struct coo_t *coo_malloc(const int nonz, const int numRows, const int numCols,
 
   if(matrix->flag == 'D') {
     matrix->dval = xmalloc(nonz*sizeof(double));
-    matrix->zval = xmalloc(0*sizeof(double complex));
+    matrix->zval = NULL;
   } else if (matrix->flag == 'Z') {
     //    printf("%d\n",nonz);
-    matrix->dval = xmalloc(0*sizeof(double));
+    matrix->dval = NULL;
     matrix->zval = xmalloc(nonz*sizeof(double complex));
   }
   //  matrix -> val = xmalloc(nonz*sizeof(double));
@@ -74,6 +74,14 @@ void coo_get_num_row(coo_t *matrix) {
       matrix -> numElRow[currRow] += 1;
     }
   }
+}
+
+void coo_issymmetric(coo_t *matrix) {
+
+  if(matrix->rows != matrix->cols) // check if matrix is square
+    return;
+
+  
 }
 
 void dcoo_kron(coo_t *matrixLeft, coo_t *matrixRight, coo_t *result) { 

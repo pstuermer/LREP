@@ -54,8 +54,8 @@ struct sp_lrep_t *splrep_malloc(const int *N, const int nev, const int sizeSub,
     LREP -> eValSort = xmalloc(6*sizeSub*sizeof(double complex));
   }
   LREP -> resNorm = xmalloc(sizeSub*sizeof(double));
-  LREP -> K = rsb_mtx_from_coo(K);
-  LREP -> M = rsb_mtx_from_coo(M);
+  LREP -> K = rsb_mtx_from_coo_sym(K);
+  LREP -> M = rsb_mtx_from_coo_sym(M);
   
   LREP -> spPrecond = cond_malloc(type, shift);
   

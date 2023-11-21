@@ -11,7 +11,7 @@ I_OPTS = "{includedir}"
 includedir = "${prefix}/include"
 prefix = "/nfs/users3/philst/librsb"
 
-CFLAGS = -std=c11 `librsb-config --I_opts` -g -O3 -Wall -Wextra -Isrc -rdynamic -pedantic -DNDEBUG $(OPTFLAGS) -march=native -mfpmath=sse -msse2 -fopenmp
+CFLAGS = -std=c11 `librsb-config --I_opts --clfags` -g -O3 -Wall -Wextra -Isrc -rdynamic -pedantic -DNDEBUG $(OPTFLAGS) -march=native -mfpmath=sse -msse2 -fopenmp
 MATHFLAGS = -lm
 #LIBS = -ldl $(OPTLIBS)
 #PREFIX ?= /usr/local
