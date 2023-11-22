@@ -5,13 +5,13 @@ GEN_PATH = include/gen.h
 OPENBLAS_PATH1 = $HOME/blis-marax/lib
 OPENBLAS_PATH2 = $HOME/blis-marax/include
 LAPACK_PATH = $HOME/ARPACK/LAPACK
-RSB_PATH = $HOME/librsb-marax/lib
+RSB_PATH = $HOME/librsb-endever/lib
 
 I_OPTS = "{includedir}"
 includedir = "${prefix}/include"
 prefix = "/nfs/users3/philst/librsb"
 
-CFLAGS = -std=c11 `librsb-config --I_opts --clfags` -g -O3 -Wall -Wextra -Isrc -rdynamic -pedantic -DNDEBUG $(OPTFLAGS) -march=native -mfpmath=sse -msse2 -fopenmp
+CFLAGS = -std=c11 `librsb-config --I_opts --cflags` -g -O3 -Wall -Wextra -Isrc -rdynamic -pedantic -DNDEBUG $(OPTFLAGS) -march=native -mfpmath=sse -msse2 -fopenmp
 MATHFLAGS = -lm
 #LIBS = -ldl $(OPTLIBS)
 #PREFIX ?= /usr/local

@@ -20,6 +20,7 @@
 // - coo_sub:         sub two coo_t matrices with different amount of
 //                    nnz values
 // - coo_transpose    transposes a given coo matrix
+// - coo_triu         returns the upper triangluar & diagonal part of a matrix
 // - coo_1norm:       calculates the 1-norm of a coo_t matrix
 // *******************************************************************
 
@@ -52,12 +53,15 @@ void coo_issymmetric(coo_t *matrix);
 void dcoo_kron(coo_t *left, coo_t *right, coo_t *result);
 void dcoo_add(coo_t *matrixA, coo_t *matrixB, coo_t *matrixR);
 void dcoo_sub(coo_t *matrixA, coo_t *matrixB, coo_t *matrixR);
+void dcoo_triu(coo_t *matrix);
 
 void zcoo_kron(coo_t *left, coo_t *right, coo_t *result);
 void zcoo_add(coo_t *matrixA, coo_t *matrixB, coo_t *matrixR);
 void zcoo_sub(coo_t *matrixA, coo_t *matrixB, coo_t *matrixR);
+void zcoo_triu(coo_t *matrix);
 
 void coo_kron(coo_t *left, coo_t *right, coo_t *result);
 void coo_add(coo_t *matrixA, coo_t *matrixB, coo_t *matrixR);
 void coo_sub(coo_t *matrixA, coo_t *matrixB, coo_t *matrixR);
-void coo_1norm(coo_t *matrix);
+void coo_triu(coo_t *matrix);
+double coo_1norm(coo_t *matrix);

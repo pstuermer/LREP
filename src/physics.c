@@ -22,15 +22,15 @@ struct coo_t *setup_diff2(const double *ln, const int *N, const int dim,
 
 struct coo_t *diff_1D(const double *ln, const int *N, const char flag) {
   double *diff;
-  diff = xmalloc(N[0]*N[0]*sizeof(double));
+  diff = xmalloc((N[0]*(N[0]+1)/2.0) * sizeof(double));
   //  const int N1 = N[0]+1;
   fourier_diff2(ln[0], N[0], diff);
   
   coo_t* diffFin;
-  diffFin = coo_malloc(N[0]*N[0], N[0], N[0], flag);
+  diffFin = coo_malloc(N[0]*(N[0]+1)/2.0), N[0], N[0], flag);
   
   for(int i = 0; i < N[0]; i++) {
-    for(int j = 0; j < N[0]; j++) {
+    for(int j = i; j < N[0]; j++) {
       
       if(diff[j+i*N[0]] == 0)
 	continue;
@@ -235,7 +235,7 @@ void fourier_diff2(const double lx, const int N, double *diffMatrix) {
 #pragma omp parallel for private(work) shared(diffMatrix) schedule (static)  
   // loop through matrix elements   
   for (int n = 1; n < N+1; n++) {   
-    for (int j = 1; j < N+1; j++) { 
+    for (int j = n; j < N+1; j++) { 
       work = 0.0;
       diffMatrix[(j-1)+(n-1)*N] = 0.0;
       // sum up different sin components. There is probably 

@@ -76,12 +76,11 @@ void coo_get_num_row(coo_t *matrix) {
   }
 }
 
-void coo_issymmetric(coo_t *matrix) {
-
-  if(matrix->rows != matrix->cols) // check if matrix is square
-    return;
-
-  
+void dcoo_triu(coo_t *matrix) {
+  for(int i = 0; i < matrix->nnz; i++) {
+    if(matrix->row[i] > matrix->col[i])
+      matrix->dval[i] = 0.0;
+  }
 }
 
 void dcoo_kron(coo_t *matrixLeft, coo_t *matrixRight, coo_t *result) { 
@@ -297,6 +296,13 @@ void zcoo_get_num_row(zcoo_t *matrix) {
   }
 }
 */
+
+void zcoo_triu(coo_t *matrix) {
+  for(int i = 0; i < matrix->nnz; i++) {
+    if(matrix->row[i] > matrix->col[i])
+      matrix->zval[i] = 0.0;
+  }
+}
 void zcoo_kron(coo_t *matrixLeft, coo_t *matrixRight, coo_t *result) {
   int sumElLeft, sumElRight;
   int posKron;
@@ -527,3 +533,11 @@ void coo_sub(coo_t *matrixA, coo_t *matrixB, coo_t *matrixR) {
     zcoo_sub(matrixA, matrixB, matrixR);
   }
 }
+
+void coo_triu(coo_t *matrix) {
+  if(matrix->flag == 'D')
+    dcoo_triu(matrix);
+  if(matrix->flag == 'Z')
+    zcoo_triu(matrix);
+}
+    
