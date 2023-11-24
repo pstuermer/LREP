@@ -6,6 +6,8 @@ OPENBLAS_PATH1 = $HOME/blis-marax/lib
 OPENBLAS_PATH2 = $HOME/blis-marax/include
 LAPACK_PATH = $HOME/ARPACK/LAPACK
 RSB_PATH = $HOME/librsb-endever/lib
+LREP_PATH = ../LREP/
+
 
 I_OPTS = "{includedir}"
 includedir = "${prefix}/include"
@@ -92,3 +94,7 @@ main.ex: ./main.c
 
 valgrind: 
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind.out.txt ./main.ex
+
+test: test.c
+	gcc -std=c11 `librsb-config --I_opts --cflags` -c test.c
+	gcc -std=c11 test.o -o test.ex -L$(LREP_PATH) -llrep -lm -fopenmp

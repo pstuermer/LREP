@@ -1,0 +1,17 @@
+#include "src/splrep.h"
+#include "src/splopb4dcg.h"
+#include <rsb.h>
+
+int main(void) {
+
+  const double lx = 20.0;
+  const int N = 256;
+
+  double * diffMatrix = (double*)xmalloc(N*(N+1)/2);
+
+  fourier_diff2(lx, N, diffMatrix);
+
+  safe_free(diffMatrix);
+
+  return 0;
+}

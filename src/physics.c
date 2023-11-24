@@ -27,7 +27,7 @@ struct coo_t *diff_1D(const double *ln, const int *N, const char flag) {
   fourier_diff2(ln[0], N[0], diff);
   
   coo_t* diffFin;
-  diffFin = coo_malloc(N[0]*(N[0]+1)/2.0), N[0], N[0], flag);
+  diffFin = coo_malloc((N[0]*(N[0]+1)/2.0), N[0], N[0], flag);
   
   for(int i = 0; i < N[0]; i++) {
     for(int j = i; j < N[0]; j++) {
@@ -230,23 +230,26 @@ struct coo_t *diff_3D(const double *ln, const int *N, const char flag) {
 void fourier_diff2(const double lx, const int N, double *diffMatrix) { 
   double h, work;
   int l = 0;
+  int index = 0;
   h = lx/N;
 
 #pragma omp parallel for private(work) shared(diffMatrix) schedule (static)  
   // loop through matrix elements   
   for (int n = 1; n < N+1; n++) {   
-    for (int j = n; j < N+1; j++) { 
+    for (int j = n; j < N+1; j++) {
+      index = (j-1)+(n-1)*N - (n*(n-1))/2;
       work = 0.0;
-      diffMatrix[(j-1)+(n-1)*N] = 0.0;
+      diffMatrix[index] = 0.0;
       // sum up different sin components. There is probably 
       // a faster way to do this
       for (int k = 1; k < N+1; k++) {
 	l = k - N/2;
 	work = l*l*sin(2*M_PI*l*j/N)*sin(2*M_PI*l*n/N);
 	work += l*l*cos(2*M_PI*l*j/N)*cos(2*M_PI*l*n/N);
-	diffMatrix[(j-1)+(n-1)*N] += (-8.0*M_PI*M_PI)/(N*N*N*h*h)*work;
+	
+	diffMatrix[index] += (-8.0*M_PI*M_PI)/(N*N*N*h*h)*work;
       }
-      diffMatrix[(j-1)+(n-1)*N] *= -0.25;
+      diffMatrix[index] *= -0.25;
     }   
   } 
 }
