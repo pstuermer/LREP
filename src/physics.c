@@ -28,14 +28,16 @@ struct coo_t *diff_1D(const double *ln, const int *N, const char flag) {
   
   coo_t* diffFin;
   diffFin = coo_malloc((N[0]*(N[0]+1)/2.0), N[0], N[0], flag);
+
+  int index = 0;
   
   for(int i = 0; i < N[0]; i++) {
     for(int j = i; j < N[0]; j++) {
-      
-      if(diff[j+i*N[0]] == 0)
+      index = j+i*N[0] - (i*(i+1))/2;
+      if(diff[index] == 0)
 	continue;
       else
-	coo_insert(diffFin, diff[j+i*N[0]], 0, j, i);
+	coo_insert(diffFin, diff[index], 0, j, i);
     }
   }
   
