@@ -34,7 +34,10 @@ struct coo_t *diff_1D(const double *ln, const int *N, const char flag) {
   for(int i = 0; i < N[0]; i++) {
     for(int j = i; j < N[0]; j++) {
       index = j+i*N[0] - (i*(i+1))/2;
+<<<<<<< HEAD
       
+=======
+>>>>>>> 240d3bdc41a369a52ed399bce7b02d38f69b3323
       if(diff[index] == 0)
 	continue;
       else
