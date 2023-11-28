@@ -108,7 +108,7 @@ void sp_get_diag_precond(struct sp_lrep_t *LREP) {
 }
 
 void de_conj_grad(double *deMatrix, double *dVec, double *sol, 
-		   const int size, struct rsb_mtx_t *deMatrixDiag) {   
+		  const int size, struct rsb_mtx_t *deMatrixDiag) {   
   // solves the symmetric positive definite linear system Ax=b 
   // using the Conjugate Gradient method (with preconditioning)
   int maxIter;
@@ -151,33 +151,33 @@ void de_conj_grad(double *deMatrix, double *dVec, double *sol,
   if (err <= tol) 
     
 
-  for (int i = 0;i < maxIter;i++) { 
-    rsb_SPMV(deMatrixDiag, r, z, flag);
-    rho = ddot_product(size, r, z);
+    for (int i = 0;i < maxIter;i++) { 
+      rsb_SPMV(deMatrixDiag, r, z, flag);
+      rho = ddot_product(size, r, z);
    
-    if (i) { 
-      beta = rho/rho1;
-      scale_vec(size, p, beta, flag);
-      add_vec(size, p, z, flag);
-    } else { 
-      copy_vec(size, z, p, flag);
-    }   
+      if (i) { 
+	beta = rho/rho1;
+	scale_vec(size, p, beta, flag);
+	add_vec(size, p, z, flag);
+      } else { 
+	copy_vec(size, z, p, flag);
+      }   
     
-    gemv_T(size, size, deMatrix, p, work, flag);
-    alpha = rho/ddot_product(size, p, work);
-    scale_vec(size, p, alpha, flag);
-    add_vec(size, sol, p, flag);
+      gemv_T(size, size, deMatrix, p, work, flag);
+      alpha = rho/ddot_product(size, p, work);
+      scale_vec(size, p, alpha, flag);
+      add_vec(size, sol, p, flag);
     
-    scale_vec(size, work, alpha, flag);
-    sub_vec(size, r, work, flag);
-    err = sqrt(ddot_product(size, r, r))/bNorm2;
+      scale_vec(size, work, alpha, flag);
+      sub_vec(size, r, work, flag);
+      err = sqrt(ddot_product(size, r, r))/bNorm2;
     
-    if (err <= tol)    
+      if (err <= tol)    
       
     
     
-    rho1 = rho;
-  }
+	rho1 = rho;
+    }
   
   safe_free( r );
   safe_free( z );
@@ -232,34 +232,33 @@ void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
   
   if (err <= tol) 
     
-  for(int i = 0;i < maxIter;i++) {
-    rsb_SPVM(spMatrixDiag, r, z, flag);
-    rho = ddot_product(size, r, z);
+    for(int i = 0;i < maxIter;i++) {
+      rsb_SPVM(spMatrixDiag, r, z, flag);
+      rho = ddot_product(size, r, z);
 
-    if( i > 1 ) { 
-      beta = rho/rho1;
-      scale_vec(size, p, beta, flag);
-      add_vec(size, p, z, flag);
-    } else { 
-      copy_vec(size, z, p, flag);
+      if( i > 1 ) { 
+	beta = rho/rho1;
+	scale_vec(size, p, beta, flag);
+	add_vec(size, p, z, flag);
+      } else { 
+	copy_vec(size, z, p, flag);
+      }
+
+      rsb_SPMV(spMatrix, p, work, flag);
+
+      alpha = rho/ddot_product(size, p, work);
+      scale_vec(size, p, alpha, flag);
+      add_vec(size, sol, p, flag);
+
+      scale_vec(size, work, alpha, flag);
+      sub_vec(size, r, work, flag);
+      err = sqrt(ddot_product(size, r, r))/bNorm2;
+
+      if (err <= tol) {
+	printf("%d\n", i);
+      }
+      rho1 = rho;
     }
-
-    rsb_SPMV(spMatrix, p, work, flag);
-
-    alpha = rho/ddot_product(size, p, work);
-    scale_vec(size, p, alpha, flag);
-    add_vec(size, sol, p, flag);
-
-    scale_vec(size, work, alpha, flag);
-    sub_vec(size, r, work, flag);
-    err = sqrt(ddot_product(size, r, r))/bNorm2;
-
-    if (err <= tol) {
-      printf("%d\n", i);
-      
-    }
-    rho1 = rho;
-  }
 
   safe_free( r );
   safe_free( z );
@@ -272,25 +271,25 @@ void sp_conj_grad(struct rsb_mtx_t *spMatrix, double *dVec,
 } 
 
 
-void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,                       
-			 double *solMat, const int size, const int nrhs,                 
-			 struct rsb_mtx_t *spMatrixDiag, const int maxIter,                      
-			 const double tol) {                                                     
+void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,   
+			 double *solMat, const int size, const int nrhs,  
+			 struct rsb_mtx_t *spMatrixDiag, const int maxIter,  
+			 const double tol) {   
   
-  // solves the symmetric positive definite linear system AX=B                                    
-  // using the block conjugate gradient method (with preconditioning)                             
-                                                                                                  
-  double err;                                                                                     
-                                                                                                  
-  double *alpha, *rho, *beta, *q;                                                         
-  alpha = xmalloc(nrhs*nrhs*sizeof(double));                                              
-  rho = xmalloc(nrhs*nrhs*sizeof(double));                                                
-  q = xmalloc(size*nrhs*sizeof(double));                                                  
-  beta = xmalloc(nrhs*nrhs*sizeof(double));                                               
-                                                                                                  
+  // solves the symmetric positive definite linear system AX=B 
+  // using the block conjugate gradient method (with preconditioning)    
+   
+  double err;
+   
+  double *alpha, *rho, *beta, *q;  
+  alpha = xmalloc(nrhs*nrhs*sizeof(double)); 
+  rho = xmalloc(nrhs*nrhs*sizeof(double));   
+  q = xmalloc(size*nrhs*sizeof(double));
+  beta = xmalloc(nrhs*nrhs*sizeof(double));  
+   
   const char flag = DATA_TYPE_DOUBLE;    
-                                          
-  // get norm of B                        
+  
+  // get norm of B    
   // if norm of B == 0, return null vector
   double BNorm2 = matrix_norm(size, nrhs, dMat, 'F', flag);
 
@@ -298,39 +297,38 @@ void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
     BNorm2 = 1.0;
     err = 0.0;
     memset(solMat, 0, size*nrhs*sizeof(double));
-
-    
+    return;
   }
-                                      
-  double *r, *z, *p;          
+   
+  double *r, *z, *p;
   r = xmalloc(size*nrhs*sizeof(double));
   z = xmalloc(size*nrhs*sizeof(double));
   p = xmalloc(size*nrhs*sizeof(double));
-                                                                                                  
-  // why is this here?                                                                            
+   
+  // why is this here? 
   copy_vec(size*nrhs, dMat, r, flag);
 
   double *work, *work1;
   work = xmalloc(nrhs*nrhs*sizeof(double));
   work1 = xmalloc(nrhs*nrhs*sizeof(double));
-                                                                                                  
-  // calculate residual r                                                                         
-  rsb_SPMM_scal_add(spMatrix, solMat, r, nrhs, -1.0, 1.0, flag);                                  
-  err = matrix_norm(size, nrhs, r, 'F', flag)/BNorm2;                                             
-                                                                                                  
+   
+  // calculate residual r   
+  rsb_SPMM_scal_add(spMatrix, solMat, r, nrhs, -1.0, 1.0, flag);    
+  err = matrix_norm(size, nrhs, r, 'F', flag)/BNorm2;
+   
   if(err <= tol)
-    
+    return;
   
   for(int i = 0; i < maxIter; i++) {
-
+    
     // orthogonalize preconditioned residual
     rsb_SPMM(spMatrixDiag, r, z, nrhs, flag);
     if(i > 0) {
       // calculate beta = -(P(i)'*Q(i))^-1(Q(i)'*Z(i+1)) 
-      // where (P(i)'*Q(i))^-1 is still in work                                          
+      // where (P(i)'*Q(i))^-1 is still in work  
       gemm_TN(nrhs, nrhs, size, q, z, work1, flag);
       gemm_NN_scal_add(nrhs, nrhs, nrhs, work, work1, beta, -1.0, 0.0, flag);
-      gemm_NN_scal_add(size, nrhs, nrhs, p, beta, z, 1.0, 1.0, flag);        
+      gemm_NN_scal_add(size, nrhs, nrhs, p, beta, z, 1.0, 1.0, flag);   
     }
     
     get_q(size, nrhs, z, flag);
@@ -340,21 +338,21 @@ void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
     // where Q = A*P
     gemm_TN(nrhs, nrhs, size, p, r, rho, flag);
     rsb_SPMM(spMatrix, p, q, nrhs, flag);
-                                         
+ 
     gemm_TN(nrhs, nrhs, size, p, q, work, flag);
-    matrix_inverse(nrhs, work, flag);           
+    matrix_inverse(nrhs, work, flag); 
     gemm_NN(nrhs, nrhs, nrhs, work, rho, alpha, flag);
 
     // get new solution X(i+1) = X(i)+P(i)*alpha
     gemm_NN_scal_add(size, nrhs, nrhs, p, alpha, solMat, 1.0, 1.0, flag);
-                                                                                                  
+   
     // get new residual R(i+1) = R(i) - Q(i)*alpha
     gemm_NN_scal_add(size, nrhs, nrhs, q, alpha, r, -1.0, 1.0, flag);
     err = matrix_norm(size, nrhs, r, 'F', flag)/BNorm2;
-                                                                                                  
+   
     if (err <= tol)
-      break;                   
-  }                
+      break;    
+  } 
 
   safe_free( r );
   safe_free( z );
@@ -363,8 +361,8 @@ void sp_block_conj_gradd(struct rsb_mtx_t *spMatrix, double *dMat,
   safe_free( alpha );
   safe_free( beta ); 
   safe_free( rho );
-                   
-       
+    
+  
 } 
 
 void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
@@ -399,8 +397,7 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
     safe_free( rho );
     safe_free( q );
     safe_free( beta );
-
-    
+    return;
   }
 
   double complex *r, *z, *p;
@@ -430,11 +427,10 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
     safe_free( q );
     safe_free( work );
     safe_free( work1 );
-    
+    return;
   }
-
+  
   for(int i = 0; i < maxIter; i++) {
-
     // orthogonalize preconditioned residual
     rsb_SPMM(spMatrixDiag, r, z, nrhs, flag);
 
@@ -445,7 +441,6 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
       gemm_NN_scal_add(nrhs, nrhs, nrhs, work, work1, beta, -1.0, 0.0, flag);
       gemm_NN_scal_add(size, nrhs, nrhs, p, beta, z, 1.0, 1.0, flag);
     }
-
     get_q(size, nrhs, z, flag);
     copy_vec(size*nrhs, z, p, flag);
 
@@ -475,7 +470,7 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
       safe_free( q );
       safe_free( work );
       safe_free( work1 );
-      
+      return;
     }
   }
 
@@ -488,5 +483,4 @@ void sp_block_conj_gradz(struct rsb_mtx_t *spMatrix, double complex *zMat,
   safe_free( q );
   safe_free( work );
   safe_free( work1 );
-
 }

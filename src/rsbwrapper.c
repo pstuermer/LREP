@@ -63,7 +63,7 @@ struct rsb_mtx_t *rsb_mtx_from_coo_sym(coo_t *matrix) {
 					 | RSB_FLAG_SYMMETRIC,
 					 &errVal);
   if(matrix->flag == 'Z')
-    mtxAp = rsb_mtx_alloc_from_coo_const(matrix->dval, matrix->row, matrix->col,
+    mtxAp = rsb_mtx_alloc_from_coo_const(matrix->zval, matrix->row, matrix->col,
 					 matrix->nnz, ztypeCode, matrix->rows,
 					 matrix->cols, brA, bcA,
 					 RSB_FLAG_DEFAULT_RSB_MATRIX_FLAGS

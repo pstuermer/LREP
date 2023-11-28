@@ -614,8 +614,6 @@ void sp_sort_eigz(struct sp_lrep_t *LREP) {
 
   safe_free( eVecT );
   safe_free( eVecTSort );
-
-  
 }
 
 void sp_sort_eig(struct sp_lrep_t *LREP) {

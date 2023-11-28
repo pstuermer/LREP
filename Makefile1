@@ -6,12 +6,14 @@ OPENBLAS_PATH1 = $HOME/OpenBlas/lib
 OPENBLAS_PATH2 = $HOME/OpenBlas/include
 LAPACK_PATH = $HOME/ARPACK/LAPACK
 RSB_PATH = $HOME/librsb/lib
+LREP_PATH = ../LREP/
+
 
 I_OPTS = "{includedir}"
 includedir = "${prefix}/include"
 prefix = "/nfs/users3/philst/librsb"
 
-CFLAGS = -std=c11 `librsb-config --I_opts --cflags` -g -O3 -Wall -Wextra -Isrc -rdynamic -pedantic -DNDEBUG $(OPTFLAGS) -march=native -mfpmath=sse -msse2 -fopenmp
+CFLAGS = -std=c11 `librsb-config --I_opts` -g -O3 -Wall -Wextra -Isrc -rdynamic -pedantic -DNDEBUG $(OPTFLAGS) -march=native -mfpmath=sse -msse2 -fopenmp
 MATHFLAGS = -lm
 #LIBS = -ldl $(OPTLIBS)
 #PREFIX ?= /usr/local
@@ -92,3 +94,7 @@ main.ex: ./main.c
 
 valgrind: 
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind.out.txt ./main.ex
+
+test: test.c
+	gcc -std=c11 `librsb-config --I_opts --cflags` -c test.c
+	gcc -std=c11 test.o -o test.ex -L$(LREP_PATH) -llrep -lm -fopenmp
