@@ -42,6 +42,7 @@ typedef struct cond_t {
   void *KPrecond[2];
   void *MPrecond[2];
 } cond_t;
+
 struct cond_t* cond_malloc(const int type, const double shift);
 
 void cond_free(struct cond_t *cond);

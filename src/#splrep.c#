@@ -312,7 +312,7 @@ struct sp_lrep_t *rsb_splrep_setup(char fileName[], const int *N, const double *
     NFac[i] = N[i]/factor; 
   }
 
-#pragma omp parallel
+  //#pragma omp parallel
   wf = xmalloc(size/factor*sizeof(double complex));
   
   load_wf(wf, size, factor, fileName); 

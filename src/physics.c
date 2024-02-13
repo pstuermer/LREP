@@ -1,6 +1,8 @@
 
 #include "physics.h"
+#include "rsbwrapper.h"
 #include <omp.h>
+#include <rsb.h>
 
 struct coo_t *setup_diff2(const double *ln, const int *N, const int dim,
 			 const char flag) {
@@ -20,6 +22,19 @@ struct coo_t *setup_diff2(const double *ln, const int *N, const int dim,
   }
 }
 
+struct rsb_mtx_t *rsb_setup_diff2(const double *ln, const int *N, const int dim) {
+
+  struct rsb_mtx_t *diff = NULL;
+  if(1 == dim)
+    diff = rsb_diff_1D(ln, N);
+  if(2 == dim)
+    diff = rsb_diff_2D(ln, N);
+  if(3 == dim)
+    diff = rsb_diff_3D(ln, N);
+
+  return diff;
+}
+
 struct coo_t *diff_1D(const double *ln, const int *N, const char flag) {
   double *diff;
   diff = xmalloc((N[0]*(N[0]+1)/2.0) * sizeof(double));
@@ -34,10 +49,6 @@ struct coo_t *diff_1D(const double *ln, const int *N, const char flag) {
   for(int i = 0; i < N[0]; i++) {
     for(int j = i; j < N[0]; j++) {
       index = j+i*N[0] - (i*(i+1))/2;
-<<<<<<< HEAD
-      
-=======
->>>>>>> 240d3bdc41a369a52ed399bce7b02d38f69b3323
       if(diff[index] == 0)
 	continue;
       else
@@ -48,6 +59,45 @@ struct coo_t *diff_1D(const double *ln, const int *N, const char flag) {
   safe_free( diff );
   
   return diffFin;
+}
+
+void set_coo_indices_diff(int size, int *rows, int *cols) {
+  int index = 0;
+
+#pragma omp parallel for collapse(2) schedule (static)
+  for(int i = 0; i < size; i++) {
+    for(int j = i; j < size; j++) {
+      index = j+i*size - (i*(i+1))/2;
+      cols[index] = i;
+      rows[index] = j;
+    }
+  }
+}
+
+void set_coo_indices_unit(int size, double *vals, int *rows, int *cols) {
+
+#pragma omp parallel for schedule (static)
+  for(int i = 0; i < size; i++) {
+    vals[i] = 1.0;
+    rows[i] = i;
+    cols[i] = i;
+  }
+}
+
+struct rsb_mtx_t *rsb_diff_1D(const double *ln, const int *N) {
+
+  int nnz = N[0]*(N[0]+1.0)/2.0;
+  double vals[nnz];
+  int rows[nnz];
+  int cols[nnz];
+
+  fourier_diff2(ln[0], N[0], vals);
+  set_coo_indices_diff(N[0], rows, cols);
+
+  struct rsb_mtx_t *diff;
+  diff = rsb_mtx_from_coo_sym_new(vals, rows, cols, nnz, N[0]);
+
+  return diff;
 }
 
 struct coo_t *diff_2D(const double *ln, const int *N, const char flag) { 
@@ -115,6 +165,48 @@ struct coo_t *diff_2D(const double *ln, const int *N, const char flag) {
   coo_free( kron1 );
   coo_free( kron2 );
   return diffFin;
+}
+
+struct rsb_mtx_t *rsb_diff_2D(const double *ln, const int *N) {
+
+  int nnz1 = N[0]*(N[0]+1.0)/2.0;
+  int nnz2 = N[1]*(N[1]+1.0)/2.0;
+
+  double vals1[nnz1], vals2[nnz2];
+  int rows1[nnz1], rows2[nnz2];
+  int cols1[nnz1], cols2[nnz2];
+
+  double uvals1[N[0]], uvals2[N[1]];
+  int urows1[N[0]], urows2[N[1]];
+  int ucols1[N[0]], ucols2[N[1]];
+
+  fourier_diff2(ln[0], N[0], vals1);
+  fourier_diff2(ln[1], N[1], vals2);
+
+  set_coo_indices_diff(N[0], rows1, cols1);
+  set_coo_indices_diff(N[1], rows2, cols2);
+
+  struct rsb_mtx_t *diff1 = NULL, *diff2 = NULL;
+  diff1 = rsb_mtx_from_coo_sym_new(vals1, rows1, cols1, nnz1, N[0]);
+  diff2 = rsb_mtx_from_coo_sym_new(vals2, rows2, cols2, nnz2, N[1]);
+
+  set_coo_indices_unit(N[0], uvals1, urows1, ucols1);
+  set_coo_indices_unit(N[1], uvals2, urows2, ucols2);
+  
+  struct rsb_mtx_t *unit1 = NULL, *unit2 = NULL;
+  unit1 = rsb_mtx_from_coo_sym_new(uvals1, urows1, ucols1, N[0], N[0]);
+  unit2 = rsb_mtx_from_coo_sym_new(uvals2, urows2, ucols2, N[1], N[1]);
+  
+  diff1 = rsb_dkron(diff1, unit2);
+  diff2 = rsb_dkron(unit1, diff2);
+  
+  diff1 = rsb_dadd(diff1, diff2);
+  
+  rsb_mtx_free(unit1);
+  rsb_mtx_free(unit2);
+  rsb_mtx_free(diff2);
+  
+  return diff1;
 }
 
 
@@ -233,13 +325,123 @@ struct coo_t *diff_3D(const double *ln, const int *N, const char flag) {
   return diffFin;
 }
 
+struct rsb_mtx_t *rsb_diff_3D(const double *ln, const int *N) {
+
+  int nnz1 = N[0]*(N[0]+1.0)/2.0;
+  int nnz2 = N[1]*(N[1]+1.0)/2.0;
+  int nnz3 = N[2]*(N[2]+1.0)/2.0;
+
+  double vals1[nnz1], vals2[nnz2], vals3[nnz3];
+  int rows1[nnz1], rows2[nnz2], rows3[nnz3];
+  int cols1[nnz1], cols2[nnz2], cols3[nnz3];
+
+  double uvals1[N[0]], uvals2[N[1]], uvals3[N[2]];
+  int urows1[N[0]], urows2[N[1]], urows3[N[2]];
+  int ucols1[N[0]], ucols2[N[1]], ucols3[N[2]];
+
+  fourier_diff2(ln[0], N[0], vals1);
+  fourier_diff2(ln[1], N[1], vals2);
+  fourier_diff2(ln[2], N[2], vals3);
+
+  set_coo_indices_diff(N[0], rows1, cols1);
+  set_coo_indices_diff(N[1], rows2, cols2);
+  set_coo_indices_diff(N[2], rows3, cols3);
+
+  struct rsb_mtx_t *diff1 = NULL, *diff2 = NULL, *diff3 = NULL;
+  diff1 = rsb_mtx_from_coo_sym_new(vals1, rows1, cols1, nnz1, N[0]);
+  diff2 = rsb_mtx_from_coo_sym_new(vals2, rows2, cols2, nnz2, N[1]);
+  diff3 = rsb_mtx_from_coo_sym_new(vals3, rows3, cols3, nnz3, N[2]);
+
+  set_coo_indices_unit(N[0], uvals1, urows1, ucols1);
+  set_coo_indices_unit(N[1], uvals2, urows2, ucols2);
+  set_coo_indices_unit(N[2], uvals3, urows3, ucols3);
+
+  struct rsb_mtx_t *unit1 = NULL, *unit2 = NULL, *unit3 = NULL;
+  unit1 = rsb_mtx_from_coo_sym_new(uvals1, urows1, ucols1, N[0], N[0]);
+  unit2 = rsb_mtx_from_coo_sym_new(uvals2, urows2, ucols2, N[1], N[1]);
+  unit3 = rsb_mtx_from_coo_sym_new(uvals3, urows3, ucols3, N[2], N[2]);
+
+  //kron(kron(Dx, 1y),1z)
+  //  rsb_time_t dt;
+  //  dt = -rsb_time();
+  diff2 = rsb_dkron(diff2, unit3);
+  //  diff1 = rsb_dkron(diff1, unit2);
+  //  dt += rsb_time();
+  //  printf("%lfs\n",dt);
+
+  /*  dt = -rsb_time();
+  diff1 = rsb_dkron(diff1, unit3);
+  dt += rsb_time();
+  printf("%lfs\n",dt);*/
+
+  //kron(1x,kron(Dy, 1z))
+  //  dt = -rsb_time();
+  diff3 = rsb_dkron(unit2, diff3);
+  //  diff2 = rsb_dkron(unit1, diff2);
+  //  dt += rsb_time();
+  //  printf("%lfs\n",dt);
+
+  //  dt = -rsb_time();
+  diff2 = rsb_dadd(diff2, diff3);
+  //  diff1 = rsb_dadd(diff1, diff2);
+  //dt += rsb_time();
+  //  printf("%lfs\n",dt);
+
+  //  dt = -rsb_time();
+  diff2 = rsb_dkron(unit1, diff2);
+  //  diff1 = rsb_dkron(diff1, unit3);
+  //  dt += rsb_time();
+  //  printf("%lfs\n",dt);
+  
+  /*  dt = -rsb_time();
+  diff2 = rsb_dkron(unit1, diff2);
+  dt += rsb_time();
+  printf("%lfs\n",dt);
+  */
+  //kron(1x,kron(1y, Dz))
+  //  dt = -rsb_time();
+  unit2 = rsb_dkron(unit2, unit3);
+  //  diff3 = rsb_dkron(unit2, diff3);
+  //  dt += rsb_time();
+  //  printf("%lfs\n",dt);
+  
+  //  dt = -rsb_time();
+  diff1 = rsb_dkron(diff1, unit2);
+  //  diff3 = rsb_dkron(unit1, diff3);
+  //  dt += rsb_time();
+  //  printf("%lfs\n",dt);
+
+  //  printf("adding.\n");
+  //  dt = -rsb_time();
+  //  rsb_err_t errVal;
+  //  diff1 = rsb_sppsp(RSB_NUMERICAL_TYPE_DOUBLE, RSB_TRANSPOSITION_N, NULL, diff1,
+  //		    RSB_TRANSPOSITION_N, NULL, diff2, &errVal);
+  /*  diff1 = rsb_dadd(diff1, diff2);
+  dt += rsb_time();
+  printf("%lfs\n",dt);
+  dt = -rsb_time();*/
+  //diff1 = rsb_sppsp(RSB_NUMERICAL_TYPE_DOUBLE, RSB_TRANSPOSITION_N, NULL, diff1,
+  //		    RSB_TRANSPOSITION_N, NULL, diff3, &errVal);
+  diff1 = rsb_dadd(diff1, diff2);
+  //  dt += rsb_time();
+  //  printf("%lfs\n", dt);
+  
+  rsb_mtx_free(unit1);
+  rsb_mtx_free(unit2);
+  rsb_mtx_free(unit3);
+  rsb_mtx_free(diff2);
+  rsb_mtx_free(diff3);
+
+  return diff1;
+}
+
 void fourier_diff2(const double lx, const int N, double *diffMatrix) { 
   double h, work;
   int l = 0;
   int index = 0;
   h = lx/N;
 
-#pragma omp parallel for private(work) shared(diffMatrix) schedule (static)  
+#pragma omp parallel for private(work) shared(diffMatrix) schedule (static) collapse(2) 
   // loop through matrix elements   
   for (int n = 1; n < N+1; n++) {   
     for (int j = n; j < N+1; j++) {
@@ -386,6 +588,7 @@ void load_wf_2C(double complex *wf1, double complex *wf2,
 double *get_apsi(double complex *wf, const int N) { 
   double *apsi;
   apsi = xmalloc(N*sizeof(double));
+#pragma omp parallel for schedule (static)
   for(int i = 0;i < N;i++) {  
     apsi[i] = sqrt(creal(wf[i])*creal(wf[i]) + cimag(wf[i])*cimag(wf[i]));
     if(apsi[i] < 1.0e-15)
@@ -397,6 +600,7 @@ double *get_apsi(double complex *wf, const int N) {
 double complex *get_psi_sq(double complex *wf, const int N) {
   double complex *psiSq;
   psiSq  = xmalloc(N*sizeof(double complex));
+#pragma omp parallel for schedule (static)
   for(int i = 0; i < N; i++) {
     psiSq[i] = wf[i];
   }
@@ -406,6 +610,7 @@ double complex *get_psi_sq(double complex *wf, const int N) {
 double complex *get_ccpsi_sq(double complex *wf, const int N) {
   double complex *ccPsiSq;
   ccPsiSq = xmalloc(N*sizeof(double complex));
+#pragma omp parallel for schedule (static)
   for(int i = 0; i < N; i++) {
     ccPsiSq[i] = conj(wf[i]);
   }
@@ -452,6 +657,7 @@ double complex *cut_wf(double complex *wf, const int *N, const int dim) {
   int counter = 0;
   if(dim == 1) {
     newWf = xmalloc((N[0]-2)*sizeof(double complex));
+#pragma omp parallel for schedule (static)
     for(int i = 1; i < N[0]-1; i++) {
       newWf[counter] = wf[i];
       counter++;
@@ -459,6 +665,7 @@ double complex *cut_wf(double complex *wf, const int *N, const int dim) {
     return newWf;
   } else if(dim == 2) {
     newWf = xmalloc((N[0]-2)*(N[1]-2)*sizeof(double complex));
+#pragma omp parallel for schedule (static) collapse(2)
     for(int i = 1; i < N[0]-1; i++) {
       for(int j = 1; j < N[1]-1; j++) {
 	newWf[counter] = wf[j+i*N[1]];
@@ -468,6 +675,7 @@ double complex *cut_wf(double complex *wf, const int *N, const int dim) {
     return newWf;
   } else if(dim == 3) {
     newWf = xmalloc((N[0]-2)*(N[1]-2)*(N[2]-2)*sizeof(double complex));
+#pragma omp parallel for schedule (static) collapse(3)
     for(int i = 1; i < N[0]-1; i++) {
       for(int j = 1; j < N[1]-1; j++) {
 	for(int k = 1; k < N[2]-1; k++) {
@@ -497,6 +705,137 @@ double complex *cut_wf(double complex *wf, const int *N, const int dim) {
   // get mu
   */
 
+struct rsb_mtx_t *rsb_setup_trap(double (*V_trap_func)(double*), grid_t *grid) {
+  int N = 1;
+  int dim = grid->dim;
+  double pos[dim];
+  struct rsb_mtx_t *trap = NULL;
+  for(int i = 0; i < dim; i++)
+    N *= grid->N[i];
+
+  double *vals = xmalloc(N*sizeof(double));
+  int *rows = xmalloc(N*sizeof(int));
+  int *cols = xmalloc(N*sizeof(int));
+
+
+  switch(dim) {
+  case 1:
+#pragma omp parallel for private(pos)
+    for(int i = 0; i < grid->N[0]; i++) {
+      pos[0] = grid->xn[0][i];
+
+      vals[i] = V_trap_func(pos);
+      rows[i] = i;
+      cols[i] = i;
+    }
+    break;
+
+  case 2:
+#pragma omp parallel for collapse(2) private(pos)
+    for(int i = 0; i < grid->N[0]; i++) {
+      for(int j = 0; j < grid->N[1]; j++) {
+	pos[0] = grid->xn[0][i];
+	pos[1] = grid->xn[1][j];
+
+	vals[j+i*grid->N[0]] = V_trap_func(pos);
+	rows[j+i*grid->N[0]] = j+i*grid->N[0];
+	cols[j+i*grid->N[0]] = j+i*grid->N[0];
+      }
+    }
+    break;
+
+  case 3:
+#pragma omp parallel for collapse(3) private(pos)
+    for(int i = 0; i < grid->N[0]; i++) {
+      for(int j = 0; j < grid->N[1]; j++) {
+	for(int k = 0; k < grid->N[2]; k++) {
+	  pos[0] = grid->xn[0][i];
+	  pos[1] = grid->xn[1][j];
+	  pos[2] = grid->xn[2][k];
+
+	  int index = i*grid->N[2]*grid->N[1]
+	    + j*grid->N[2] + k;
+
+	  vals[index] = V_trap_func(pos);
+	  rows[index] = index;
+	  cols[index] = index;
+	}
+      }
+    }
+    break;
+  }
+  
+  trap = rsb_mtx_from_coo_sym_new(vals, rows, cols, N, N);
+
+  safe_free( vals );
+  safe_free( rows );
+  safe_free( cols );
+
+  return trap;
+}
+
+struct rsb_mtx_t *rsb_setup_int(double *apsi, double mu, const int *N,
+				const int dim, const double *intParam) {
+
+  int Ntot = 1;
+  struct rsb_mtx_t *mtx = NULL;
+  for(int i = 0; i < dim; i++)
+    Ntot *= N[i];
+
+  double *vals = xmalloc(Ntot*sizeof(double));
+  int *rows = xmalloc(Ntot*sizeof(double));
+  int *cols = xmalloc(Ntot*sizeof(double));
+
+#pragma omp parallel for schedule(static)
+  for(int i = 0; i < Ntot; i++) {
+    vals[i] = rsb_int(apsi[i], mu, dim, intParam);;
+    rows[i] = i;
+    cols[i] = i;
+  }
+
+  mtx = rsb_mtx_from_coo_sym_new(vals, rows, cols, Ntot, Ntot);
+
+  safe_free( vals );
+  safe_free( rows );
+  safe_free( cols );
+
+  return mtx;
+}
+
+double rsb_int(double apsi, double mu, const int dim, const double *intParam) {
+  // need to find something better than mu == 0.0;
+  switch(dim)
+    {
+    case 1:
+      if(0.0 == mu)
+	return intParam[0]*apsi*apsi+0.5*intParam[1]*apsi;
+	
+      return 2.0*intParam[0]*apsi*apsi+1.5*intParam[1]*apsi-mu;
+      break;
+
+    case 2:
+      if(0.0 == mu)
+	return apsi*apsi*(log(apsi*apsi)+1.0);
+
+      return apsi*apsi*(2.0*log(apsi*apsi)+1.0)-mu;
+      break;
+
+    case 3:
+      if(0.0 == mu)
+	return intParam[0]*apsi*apsi;;
+
+      return 2.0*intParam[0]*apsi*apsi-mu; // add three-dimensional BdG
+      break;
+
+    default:
+      printf("Interactions not defined for this dimensionality.\n");
+      return 0.0;
+      break;
+    }
+}
+
+  
+  
 void setup_trap(coo_t *cooTrap, const int *N, const double *param, grid_t *grid,
 		const int dim, const int trapChoice) { 
   int index[dim];

@@ -78,10 +78,14 @@ void sp_get_search_dirz(struct sp_lrep_t *LREP) {
 }
 
 void sp_get_search_dir(struct sp_lrep_t *LREP) {
-  if(LREP->flag == 'D') {
+  switch(LREP->flag) {
+  case 'D':
     sp_get_search_dird(LREP);
-  } else if(LREP->flag == 'Z') {
+    break;
+
+  case 'Z':
     sp_get_search_dirz(LREP);
+    break;
   }
 }
 
@@ -111,15 +115,18 @@ void sp_apply_precondd(struct sp_lrep_t *LREP) {
    
   int type = LREP->spPrecond->type;  
   const int n = LREP->size;  
-  const int sizeSub = LREP->sizeSub;   
-   
-  if (!type) {    
-    // do nothing, as no preconditioner chosen  
-    ;   
-  } else if (type == 1) {   
-    double *work1, *work2;  
-    work1 = xmalloc(n*sizeSub* sizeof(double));  
-    work2 = xmalloc(n*sizeSub* sizeof(double));  
+  const int sizeSub = LREP->sizeSub;
+  double *work1 = NULL, *work2 = NULL;
+  work1 = xcalloc(n*sizeSub, sizeof(double));
+  work2 = xcalloc(n*sizeSub, sizeof(double));
+
+  switch(type) {
+  case 0:
+    // do nothing as not preconditioner chosen
+    break;
+
+  case 1:
+    // diagonal preconditioner
     // multiply Mdiag and Kdiag on P and Q respectively   
     rsb_SPMM(LREP->spPrecond->KDiag, LREP->P, work1, sizeSub, LREP->flag); 
     rsb_SPMM(LREP->spPrecond->MDiag, LREP->Q, work2, sizeSub, LREP->flag); 
@@ -127,15 +134,21 @@ void sp_apply_precondd(struct sp_lrep_t *LREP) {
     copy_vec(n*sizeSub, work1, LREP->P, LREP->flag);    
     copy_vec(n*sizeSub, work2, LREP->Q, LREP->flag);    
   
-    safe_free( work1 );
-    safe_free( work2 );
-    
-  } else if (type == 2) {   
-    // use conjgrad to solve system for each eigenvalue   
-    double *work1, *work2;  
-    work1 = xcalloc(n*sizeSub,sizeof(double));   
-    work2 = xcalloc(n*sizeSub,sizeof(double));
+    break;
+
+  case 2:
+    // ILU(0)
+    // first apply Preconditioner on P, which then turns to Q  
+    rsb_SPSM(LREP->spPrecond->MPrecond[0], LREP->P, work1, sizeSub, LREP->flag);
+    rsb_SPSM(LREP->spPrecond->KPrecond[0], LREP->Q, work2, sizeSub, LREP->flag);
    
+    rsb_SPSM(LREP->spPrecond->MPrecond[1], work1, LREP->Q, sizeSub, LREP->flag);
+    rsb_SPSM(LREP->spPrecond->KPrecond[1], work2, LREP->P, sizeSub, LREP->flag);
+
+    break;
+
+  case 3:
+    // block_conjugate gradient
     sp_block_conj_gradd(LREP->K, (double *)LREP->P, work1, n, sizeSub,
 		       LREP->spPrecond->KDiag, 20, 1.0e-4);
     sp_block_conj_gradd(LREP->M, (double *)LREP->Q, work2, n, sizeSub,
@@ -143,15 +156,46 @@ void sp_apply_precondd(struct sp_lrep_t *LREP) {
 
     copy_vec(n*sizeSub, work1, LREP->P, LREP->flag);
     copy_vec(n*sizeSub, work2, LREP->Q, LREP->flag);
-   
-    safe_free( work1 );
-    safe_free( work2 );
 
-  } else if (type == 3) {   
-    double *work1, *work2;  
-    work1 = xmalloc(n*sizeSub*sizeof(double));   
-    work2 = xmalloc(n*sizeSub*sizeof(double));   
+    break;
+
+  default:
+    fprintf(stderr, "Preconditioner type not recognized.\n");
+    break;
+  }
+
+  safe_free( work1 );
+  safe_free( work2 );
+      
+}
+
+void sp_apply_precondz(struct sp_lrep_t *LREP) { 
    
+  int type = LREP->spPrecond->type;  
+  const int n = LREP->size;  
+  const int sizeSub = LREP->sizeSub;
+  double complex *work1 = NULL, *work2 = NULL;
+  work1 = xcalloc(n*sizeSub, sizeof(double complex));
+  work2 = xcalloc(n*sizeSub, sizeof(double complex));
+
+  switch(type) {
+  case 0:
+    // do nothing as not preconditioner chosen
+    break;
+
+  case 1:
+    // diagonal preconditioner
+    // multiply Mdiag and Kdiag on P and Q respectively   
+    rsb_SPMM(LREP->spPrecond->KDiag, LREP->P, work1, sizeSub, LREP->flag); 
+    rsb_SPMM(LREP->spPrecond->MDiag, LREP->Q, work2, sizeSub, LREP->flag); 
+   
+    copy_vec(n*sizeSub, work1, LREP->P, LREP->flag);    
+    copy_vec(n*sizeSub, work2, LREP->Q, LREP->flag);    
+  
+    break;
+
+  case 2:
+    // ILU(0)
     // first apply Preconditioner on P, which then turns to Q  
     rsb_SPSM(LREP->spPrecond->MPrecond[0], LREP->P, work1, sizeSub, LREP->flag);
     rsb_SPSM(LREP->spPrecond->KPrecond[0], LREP->Q, work2, sizeSub, LREP->flag);
@@ -159,99 +203,99 @@ void sp_apply_precondd(struct sp_lrep_t *LREP) {
     rsb_SPSM(LREP->spPrecond->MPrecond[1], work1, LREP->Q, sizeSub, LREP->flag);
     rsb_SPSM(LREP->spPrecond->KPrecond[1], work2, LREP->P, sizeSub, LREP->flag);
    
-    safe_free( work1 );
-    safe_free( work2 );
-   
-  } else { 
-    fprintf(stderr, "Preconditioner type not recognized.\n");
-    exit(1); 
-  }
-   
-      
-}
+    break;
 
-void sp_apply_precondz(struct sp_lrep_t *LREP) {
-
-  int type = LREP->spPrecond->type;
-  const int n = LREP->size;
-  const int sizeSub = LREP->sizeSub;
-
-  if(!type) {
-    // do nothing, as no preconditioner chosen
-    ;
-  } else if (type == 1) {
-    double complex *work1, *work2;
-    work1 = xmalloc(n*sizeSub*sizeof(double complex));
-    work2 = xmalloc(n*sizeSub*sizeof(double complex));
-    // multiply Mdiag and Kdiag on P and Q respectively
-    rsb_SPMM(LREP->spPrecond->KDiag, (double complex *)LREP->P,
-	     work1, sizeSub, LREP->flag);
-    rsb_SPMM(LREP->spPrecond->MDiag, (double complex *)LREP->Q,
-	     work2, sizeSub, LREP->flag);
+  case 3:
+    // block_conjugate gradient
+    sp_block_conj_gradz(LREP->K, LREP->P, work1, n, sizeSub,
+		       LREP->spPrecond->KDiag, 20, 1.0e-4);
+    sp_block_conj_gradz(LREP->M, LREP->Q, work2, n, sizeSub,
+		       LREP->spPrecond->MDiag, 20, 1.0e-4);
 
     copy_vec(n*sizeSub, work1, LREP->P, LREP->flag);
     copy_vec(n*sizeSub, work2, LREP->Q, LREP->flag);
+   
+    break;
 
-    safe_free( work1 );
-    safe_free( work2 );
-
-  } else if (type == 2) {
-    // use conjgrad to solve system for each eigenvalue
-    double complex *work1, *work2;
-
-    work1 = xcalloc(n*sizeSub, sizeof(double complex));
-    work2 = xcalloc(n*sizeSub, sizeof(double complex));
-
-    sp_block_conj_gradz(LREP->K, LREP->P, work1, n,
-			sizeSub, LREP->spPrecond->KDiag, 100, 1.0e-5);
-    sp_block_conj_gradz(LREP->M, LREP->Q, work2, n,
-			sizeSub, LREP->spPrecond->MDiag, 100, 1.0e-5);
-
-    copy_vec(sizeSub*n, work1, LREP->P, LREP->flag);
-    copy_vec(sizeSub*n, work2, LREP->Q, LREP->flag);
-
-    safe_free( work1 );
-    safe_free( work2 );
-
-  } else if (type == 3) {
-    double complex *work1, *work2;
-    work1 = xmalloc(n*sizeSub*sizeof(double complex));
-    work2 = xmalloc(n*sizeSub*sizeof(double complex));
-
-    // first apply Preconditioner on P, which then turns to Q
-    rsb_SPSM(LREP->spPrecond->MPrecond[0], LREP->P, work1, sizeSub, LREP->flag);
-    rsb_SPSM(LREP->spPrecond->KPrecond[0], LREP->Q, work2, sizeSub, LREP->flag);
-
-    rsb_SPSM(LREP->spPrecond->MPrecond[1], work1, LREP->Q, sizeSub, LREP->flag);
-    rsb_SPSM(LREP->spPrecond->KPrecond[1], work2, LREP->P, sizeSub, LREP->flag);
-
-    safe_free( work1 );
-    safe_free( work2 );
-
-  } else {
+  default:
     fprintf(stderr, "Preconditioner type not recognized.\n");
-    exit(1);
+    break;
   }
+
+  safe_free( work1 );
+  safe_free( work2 );
+      
 }
 
 void sp_apply_precond(struct sp_lrep_t *LREP) {
-  if(LREP->flag == 'D') {
+
+  switch(LREP->flag) {
+  case 'D':
     sp_apply_precondd(LREP);
-  } else if(LREP->flag == 'Z') {
+    break;
+
+  case 'Z':
     sp_apply_precondz(LREP);
+    break;
   }
 }
 
-void sp_setup_U(struct sp_lrep_t *LREP) {    
-  const int n = LREP->size;  
-  const int sizeSub = LREP->sizeSub;   
-  int mult;  
-   
-  if(LREP->iter == 0) {
-    mult = 2;
-  } else {   
-    mult = 3;
+
+void sp_setup_U(struct sp_lrep_t *LREP) {
+  // could also just do the whole thing with copy_vec??
+  // can also set the initial pointers to U and V
+  // to avoid repeated accesses
+  const int n = LREP->size;
+  const int sizeSub = LREP->sizeSub;
+  const int iter = LREP->iter;
+
+  switch(iter) {
+    
+  case 0:
+
+#pragma omp parallel for collapse(2)
+    for(int i = 0; i < n; i++) {
+      /*for(int j = 0; j < sizeSub*mult; j++) {
+	
+	if(j < sizeSub) {
+	  LREP->U[j + i*sizeSub*mult] = LREP->X[j+i*sizeSub];
+	} else {
+	  LREP->U[j + i*sizeSub*mult] = LREP->P[j-sizeSub+i*sizeSub];
+	}
+	}*/
+      for(int j = 0; j < sizeSub; j++) {
+	LREP->U[j + i*sizeSub] = LREP->X[j + i*sizeSub];
+	LREP->U[j+sizeSub + i*sizeSub] = LREP->P[j+i*sizeSub];
+      }
+    }
+    break;
+
+  default:
+
+#pragma omp parallel for collapse(2)
+    for(int i = 0; i < n; i++) {
+      for(int j = 0; j < sizeSub; j++) {
+	LREP->U[j + i*sizeSub] = LREP->X[j+i*sizeSub];
+	LREP->U[j+sizeSub + i*sizeSub] = LREP->X1[j+i*sizeSub];
+	LREP->U[j+2*sizeSub + i*sizeSub] = LREP->P[j+i*sizeSub];
+      }
+    }
+    break;
   }
+}
+  /*
+      for(int j = 0; j < sizeSub*mult; j++) {
+	if(j < sizeSub) {
+	  LREP->U[j+i*sizeSub*mult] = LREP->X[j+i*sizeSub];
+	} else if (j < 2*sizeSub && j >= sizeSub) {
+	  LREP->U[j+i*sizeSub*mult] = LREP->X1[j-sizeSub+i*sizeSub];
+	} else {
+	  LREP->U[j+i*sizeSub*mult] = LREP->P[j-2*sizeSub+i*sizeSub];
+	}
+      }
+    }
+  */
+/*  
   for(int i = 0; i < n; i++) {   
     for(int j = 0; j < sizeSub*mult; j++) { 
       if(LREP-> iter == 0) {
@@ -270,20 +314,42 @@ void sp_setup_U(struct sp_lrep_t *LREP) {
 	}    
       } 
     }   
+  }   
+}
+*/
+void sp_setup_V(struct sp_lrep_t *LREP) {
+  // could also just replace with copy_vec?
+  const int n = LREP->size;  
+  const int sizeSub = LREP->sizeSub;
+  const int iter = LREP->iter;
+
+  switch(iter) {
+  case 0:
+#pragma omp parallel for collapse(2)
+    for(int i = 0; i < n; i++) {
+      for(int j = 0; j < sizeSub; j++) {
+	LREP->V[j + i*sizeSub] = LREP->Y[j+i*sizeSub];
+	LREP->V[j+sizeSub + i*sizeSub] = LREP->Q[j+i*sizeSub];
+      }
+    }
+
+    break;
+
+  default:
+#pragma omp parallel for collapse(2)
+    for(int i = 0; i < n; i++) {
+      for(int j = 0; j < sizeSub; j++) {
+	LREP->V[j + i*sizeSub] = LREP->Y[j+i*sizeSub];
+	LREP->V[j+sizeSub + i*sizeSub] = LREP->Y1[j+i*sizeSub];
+	LREP->V[j+2*sizeSub + i*sizeSub] = LREP->Q[j+i*sizeSub];
+      }
+    }
+
+    break;
   }
-     
 }
 
-void sp_setup_V(struct sp_lrep_t *LREP) {    
-  const int n = LREP->size;  
-  const int sizeSub = LREP->sizeSub;   
-  int mult;  
-  if(LREP->iter == 0) {
-    mult = 2;
-  } else {   
-    mult = 3;
-  }
-   
+  /*
   for(int i = 0; i < n; i++) {   
     for(int j = 0; j < sizeSub*mult; j++) { 
       if(LREP-> iter == 0) {
@@ -302,17 +368,12 @@ void sp_setup_V(struct sp_lrep_t *LREP) {
 	}    
       } 
     }   
-  }    
-}
+    }
+    }*/
 
 void sp_setup_W(struct sp_lrep_t *LREP) {    
-  const int n = LREP->size;  
-  int mult;  
-  if(LREP->iter == 0) {
-    mult = 2;
-  } else {   
-    mult = 3;
-  }
+  const int n = LREP->size;
+  const int mult = (0 == LREP->iter) ? 2 : 3;
   const int sizeSub = LREP->sizeSub*mult;   
   
   gemm_TN(sizeSub, sizeSub, n, LREP->U, LREP->V, LREP->W, LREP->flag);   
@@ -320,13 +381,8 @@ void sp_setup_W(struct sp_lrep_t *LREP) {
 
 void sp_setup_Hsrd(struct sp_lrep_t *LREP) {  
   // I am not so super sure about the sizes for rsb_SPMM here  
-  const int n = LREP->size;  
-  int mult;  
-  if(LREP->iter == 0) {
-    mult = 2;
-  } else {   
-    mult = 3;
-  }
+  const int n = LREP->size;
+  const int mult = (0 == LREP->iter) ? 2 : 3;
   const int sizeSub = LREP->sizeSub*mult;   
   
   double *work, *work1, *work2, *work3;    
@@ -342,7 +398,8 @@ void sp_setup_Hsrd(struct sp_lrep_t *LREP) {
   // Compute top right block matrix first
   rsb_SPMM(LREP->K, LREP->U, work, sizeSub, LREP->flag);
   gemm_TN(sizeSub, sizeSub, n, LREP->U, work, work1, LREP->flag);
-  
+
+#pragma omp parallel for collapse(2)
   for(int i = 0; i < sizeSub; i++) {   
     for(int j = 0; j < sizeSub; j++) { 
       LREP->Hsr[j+sizeSub*(2*i+1)] = work1[j+i*sizeSub];    
@@ -356,7 +413,8 @@ void sp_setup_Hsrd(struct sp_lrep_t *LREP) {
 
   gemm_TN(sizeSub, sizeSub, n, LREP->V, work2, work3, LREP->flag);    
   gemm_TN(sizeSub, sizeSub, sizeSub, LREP->W, work3, work1, LREP->flag);
-  
+
+#pragma omp parallel for collapse(2)
   for(int i = 0; i < sizeSub; i++) {   
     for(int j = 0; j < sizeSub; j++) {  
       LREP->Hsr[2*sizeSub*sizeSub+j+2*sizeSub*i] = work1[j+i*sizeSub];  
@@ -373,12 +431,7 @@ void sp_setup_Hsrd(struct sp_lrep_t *LREP) {
 
 void sp_setup_Hsrz(struct sp_lrep_t *LREP) {
   const int n = LREP->size;
-  int mult;
-  if(LREP->iter == 0) {
-    mult = 2;
-  } else {
-    mult = 3;
-  }
+  const int mult = (0 == LREP->iter) ? 2 : 3;
   const int sizeSub = LREP->sizeSub*mult;
 
   double complex *work, *work1, *work2, *work3;
@@ -394,6 +447,7 @@ void sp_setup_Hsrz(struct sp_lrep_t *LREP) {
   // Compute top right block matrix first
   rsb_SPMM(LREP->K, LREP->U, work, sizeSub, LREP->flag);
   gemm_TN(sizeSub, sizeSub, n, LREP->U, work, work1, LREP->flag);
+#pragma omp parallel for collapse(2)
   for(int i = 0; i < sizeSub; i++) {
     for(int j = 0; j < sizeSub; j++) {
       LREP->Hsr[j+sizeSub*(2*i+1)] = work1[j+i*sizeSub];
@@ -406,6 +460,7 @@ void sp_setup_Hsrz(struct sp_lrep_t *LREP) {
   rsb_SPMM(LREP->M, work, work2, sizeSub, LREP->flag);
   gemm_TN(sizeSub, sizeSub, n, LREP->V, work2, work3, LREP->flag);
   gemm_TN(sizeSub, sizeSub, sizeSub, LREP->W, work3, work1, LREP->flag);
+#pragma omp parallel for collapse(2)
   for(int i = 0; i < sizeSub; i++) {
     for(int j = 0; j < sizeSub; j++) {
       LREP->Hsr[2*sizeSub*sizeSub+j+2*sizeSub*i] = work1[j+i*sizeSub];
@@ -419,23 +474,23 @@ void sp_setup_Hsrz(struct sp_lrep_t *LREP) {
 }
 
 void sp_setup_Hsr(struct sp_lrep_t *LREP) {
-  if(LREP->flag == 'D') {
-    sp_setup_Hsrd(LREP);
-  } else if(LREP->flag == 'Z') {
-    sp_setup_Hsrz(LREP);
-  }
 
-  
+  switch(LREP->flag) {
+  case 'Z':
+    sp_setup_Hsrz(LREP);
+    break;
+
+  default:
+    sp_setup_Hsrd(LREP);
+    break;
+
+  }
 }
+ 
 
 void sp_sort_eigd(struct sp_lrep_t *LREP) {   
-  const int sizeSub = LREP->sizeSub;   
-  int mult;  
-  if(LREP->iter == 0) {
-    mult = 4;
-  } else {   
-    mult = 6;
-  }
+  const int sizeSub = LREP->sizeSub;
+  const int mult = (0 == LREP->iter) ? 4 : 6;
   
   int arrSorted[sizeSub];    
   double curr = 0.0;   
@@ -467,6 +522,8 @@ void sp_sort_eigd(struct sp_lrep_t *LREP) {
     LREP->eValSort[i] = curr;    
     last_min = curr;   
   }
+
+#pragma omp parallel for collapse(2)
   for(int i = 0; i < sizeSub; i++) {   
     for(int j = 0; j < mult*sizeSub; j++) { 
       eVecTSort[j+i*mult*sizeSub] = eVecT[j+arrSorted[i]*mult*sizeSub];    
@@ -485,12 +542,7 @@ void sp_sort_eigz(struct sp_lrep_t *LREP) {
   // (and somehow keep the index of everything for eigenvectors)
   
   const int sizeSub = LREP->sizeSub;
-  int mult;
-  if(LREP->iter == 0) {
-    mult = 4;
-  } else {
-    mult = 6;
-  }
+  const int mult = (0 == LREP->iter) ? 4 : 6;
   int arrSort[sizeSub];
   int arrSortAmp[mult*sizeSub];
 
@@ -506,10 +558,12 @@ void sp_sort_eigz(struct sp_lrep_t *LREP) {
 
   // bubble sort eigenvalues according to their complex amplitude
 
+#pragma omp parallel for
   for(int i = 0; i < mult*sizeSub; i++) {
     arrSortAmp[i] = i;
   }
 
+  //#pragma omp parallel for collapse(2)
   for(int i = 0; i < mult*sizeSub-1; i++) {
     for(int j = 0; j < mult*sizeSub-i-1; j++) {
       if(cabs(LREP->eValsr[j]) > cabs(LREP->eValsr[j+1])) {
@@ -603,7 +657,8 @@ void sp_sort_eigz(struct sp_lrep_t *LREP) {
   }
   //  printf("\n");
   //  print_array(sizeSub,1,arrSort);
-  
+
+#pragma omp parallel for collapse(2)
   for(int i = 0; i < sizeSub; i++) {
     for(int j = 0; j < mult*sizeSub; j++) {
       eVecTSort[j+i*mult*sizeSub] = eVecT[j+arrSort[i]*mult*sizeSub];
@@ -619,44 +674,72 @@ void sp_sort_eigz(struct sp_lrep_t *LREP) {
 }
 
 void sp_sort_eig(struct sp_lrep_t *LREP) {
-  if(LREP->flag == 'D') {
-    sp_sort_eigd(LREP);
-  } else if(LREP->flag == 'Z') {
-    printf("1\n");
+  switch(LREP->flag) {
+  case 'Z':
     sp_sort_eigz(LREP);
+    break;
+
+  default:
+    sp_sort_eigd(LREP);
+    break;
   }
 }
 
 void sp_split_eig_vec(struct sp_lrep_t *LREP) {    
-  const int sizeSub = LREP->sizeSub;   
-  int mult;  
-  if(LREP->iter == 0) {
-    mult = 4;
-  } else {   
-    mult = 6;
+  const int sizeSub = LREP->sizeSub;
+  const int mult = (0 == LREP->iter) ? 4 : 6;
+
+#pragma omp parallel for
+  for(int i = 0; i < sizeSub*sizeSub*mult/2; i++) {
+    LREP->Ysr[i] = LREP->eVecSort[i];
+    LREP->Xsr[i] = LREP->eVecSort[i + sizeSub*sizeSub*mult/2];
   }
-   
-  for(int i = 0; i < sizeSub*sizeSub*mult; i++) { 
+}
+    /*
+    for(int i = 0; i < sizeSub*sizeSub*mult; i++) {
     if(i < sizeSub*sizeSub*mult/2) {    
       LREP->Ysr[i] = LREP->eVecSort[i];    
     } else { 
       LREP->Xsr[i-sizeSub*sizeSub*mult/2] = LREP->eVecSort[i];   
     }   
-  }   
-}
+    }
+}*/
 
 void sp_compute_eig_vec(struct sp_lrep_t *LREP) {  
   const int n = LREP->size;  
-  const int sizeSub = LREP->sizeSub;   
-  int mult;  
-  if(LREP->iter == 0) {
-    mult = 2;
-  } else {   
-    mult = 3;
-  }
+  const int sizeSub = LREP->sizeSub;
+  const int mult = (0 == LREP->iter) ? 2 : 3;
    
   double *workd = NULL;   
   double complex *workz = NULL;
+
+  switch(LREP->flag) {
+  case 'Z':
+    workz = xmalloc(mult*sizeSub*sizeSub*sizeof(double complex));
+    // first do X
+    gemm_NN(n, sizeSub, mult*sizeSub, LREP->U, LREP->Xsr, LREP->X1, LREP->flag);
+    // then Y
+    gemm_NN(mult*sizeSub, sizeSub, mult*sizeSub, LREP->W, LREP->Ysr, workz, LREP->flag);
+    gemm_NN(n, sizeSub, mult*sizeSub, LREP->V, workz, LREP->Y1, LREP->flag);
+    
+    safe_free( workz );
+
+    break;
+
+  default:
+    workd = xmalloc(mult*sizeSub*sizeSub*sizeof(double));
+    // first do X   
+    gemm_NN(n, sizeSub, mult*sizeSub, LREP->U, LREP->Xsr, LREP->X1, LREP->flag);  
+    // then Y  
+    gemm_NN(mult*sizeSub, sizeSub, mult*sizeSub, LREP->W, LREP->Ysr, workd, LREP->flag); 
+    gemm_NN(n, sizeSub, mult*sizeSub, LREP->V, workd, LREP->Y1, LREP->flag);
+    
+    safe_free( workd );
+    break;
+  }
+}
+/*
+
 
   if(LREP->flag == 'D') {
     workd = xmalloc(mult*sizeSub*sizeSub*sizeof(double));
@@ -678,7 +761,7 @@ void sp_compute_eig_vec(struct sp_lrep_t *LREP) {
     
     safe_free( workz );
   }
-}
+  }*/
 
 
 void sp_normalize_eig_vec(struct sp_lrep_t *LREP) {
@@ -687,8 +770,61 @@ void sp_normalize_eig_vec(struct sp_lrep_t *LREP) {
 
   double norm, normx, normy;
    
-  double *transXd, *transYd;  
-  double complex *transXz, *transYz;
+  double *transXd = NULL, *transYd = NULL;  
+  double complex *transXz = NULL, *transYz = NULL;
+
+  switch(LREP->flag) {
+  case 'Z':
+    transXz = xmalloc(n*sizeSub*sizeof(double complex));
+    transYz = xmalloc(n*sizeSub*sizeof(double complex));
+    
+    matrix_trans(n, sizeSub, LREP->X1, transXz, LREP->flag);
+    matrix_trans(n, sizeSub, LREP->Y1, transYz, LREP->flag);
+
+    for(int i = 0; i < sizeSub; i++) {
+      normx = asum(n, &transXz[i*n], LREP->flag);
+      normy = asum(n, &transYz[i*n], LREP->flag);
+
+      norm = normx + normy;
+
+      scale_vec(n, &transXz[i*n], 1.0/norm, LREP->flag);
+      scale_vec(n, &transYz[i*n], 1.0/norm, LREP->flag);
+    }
+
+    matrix_trans(sizeSub, n, transXz, LREP->X1, LREP->flag);
+    matrix_trans(sizeSub, n, transYz, LREP->Y1, LREP->flag);
+
+    safe_free( transXz );
+    safe_free( transYz );
+    break;
+
+  default:
+    transXd = xmalloc(n*sizeSub*sizeof(double));
+    transYd = xmalloc(n*sizeSub*sizeof(double));
+    
+    matrix_trans(n, sizeSub, LREP->X1, transXd, LREP->flag);
+    matrix_trans(n, sizeSub, LREP->Y1, transYd, LREP->flag);
+
+    for(int i = 0; i < sizeSub; i++) {   
+      normx = asum(n, &transXd[i*n], LREP->flag);
+      normy = asum(n, &transYd[i*n], LREP->flag);
+      
+      norm = normx + normy;   
+      
+      scale_vec(n, &transXd[i*n], 1.0/norm, LREP->flag);    
+      scale_vec(n, &transYd[i*n], 1.0/norm, LREP->flag);    
+    }
+   
+    matrix_trans(sizeSub, n, transXd, LREP->X1, LREP->flag);
+    matrix_trans(sizeSub, n, transYd, LREP->Y1, LREP->flag);
+    
+    safe_free( transXd ); 
+    safe_free( transYd );
+    break;
+  }
+}
+
+/*   
 
   if(LREP->flag == 'D') {
 
@@ -697,7 +833,7 @@ void sp_normalize_eig_vec(struct sp_lrep_t *LREP) {
     
     matrix_trans(n, sizeSub, LREP->X1, transXd, LREP->flag);
     matrix_trans(n, sizeSub, LREP->Y1, transYd, LREP->flag);
-    
+
     for(int i = 0; i < sizeSub; i++) {   
       normx = asum(n, &transXd[i*n], LREP->flag);
       normy = asum(n, &transYd[i*n], LREP->flag);
@@ -738,9 +874,8 @@ void sp_normalize_eig_vec(struct sp_lrep_t *LREP) {
     safe_free( transXz );
     safe_free( transYz );
   }
-
       
-}
+  }*/
 
 void sp_get_residual_normd(struct sp_lrep_t *LREP) {
   const int n = LREP->size;  
@@ -835,14 +970,24 @@ void sp_get_residual_normz(struct sp_lrep_t *LREP) {
 }
 
 void sp_get_residual_norm(struct sp_lrep_t *LREP) {
+  switch(LREP->flag) {
+  case 'Z':
+    sp_get_residual_normz(LREP);
+    break;
+
+  default:
+    sp_get_residual_normd(LREP);
+    break;
+  }
+}
+/*
   if(LREP->flag == 'D') {
     sp_get_residual_normd(LREP);
   } else if(LREP->flag == 'Z') {
     sp_get_residual_normz(LREP);
   }
+  }*/
 
-  
-}
 
 void sp_switch_eig_vec(struct sp_lrep_t *LREP) {
   // in the current iteration we saved the new eigenvectors in X1 and Y1 
@@ -856,7 +1001,37 @@ void sp_switch_eig_vec(struct sp_lrep_t *LREP) {
   double complex *workz;
   workd = xmalloc(n*sizeSub*sizeof(double));
   workz = xmalloc(n*sizeSub*sizeof(double complex));
-  
+
+  switch(LREP->flag) {
+  case 'Z':
+    copy_matrix(n, sizeSub, LREP->X, workz, LREP->flag);
+    copy_matrix(n, sizeSub, LREP->X1, LREP->X, LREP->flag);
+    copy_matrix(n, sizeSub, workz, LREP->X1, LREP->flag);
+
+    copy_matrix(n, sizeSub, LREP->Y, workz, LREP->flag);
+    copy_matrix(n, sizeSub, LREP->Y1, LREP->Y, LREP->flag);
+    copy_matrix(n, sizeSub, workz, LREP->Y1, LREP->flag);
+
+    safe_free( workz );
+    safe_free( workd );
+    break;
+
+  default:
+    copy_matrix(n, sizeSub, LREP->X, workd, LREP->flag);    
+    copy_matrix(n, sizeSub, LREP->X1, LREP->X, LREP->flag);
+    copy_matrix(n, sizeSub, workd, LREP->X1, LREP->flag);   
+    
+    copy_matrix(n, sizeSub, LREP->Y, workd, LREP->flag);    
+    copy_matrix(n, sizeSub, LREP->Y1, LREP->Y, LREP->flag);
+    copy_matrix(n, sizeSub, workd, LREP->Y1, LREP->flag);   
+   
+    safe_free( workd );
+    safe_free( workz );
+    break;
+  }
+}
+
+/*
   if(LREP->flag == 'D') {
     copy_matrix(n, sizeSub, LREP->X, workd, LREP->flag);    
     copy_matrix(n, sizeSub, LREP->X1, LREP->X, LREP->flag);
@@ -881,14 +1056,14 @@ void sp_switch_eig_vec(struct sp_lrep_t *LREP) {
     safe_free( workz );
     safe_free( workd );
   }
-   
+ 
       
-}
+  }*/
 
 
 void sp_lopb4dcg(sp_lrep_t *LREP) {
 
-  int mult;
+  int mult = 0;
   //  double s[3*LREP->sizeSub];
   int breaking = 0;
 
@@ -899,30 +1074,24 @@ void sp_lopb4dcg(sp_lrep_t *LREP) {
   printf("got search dir.\n");
 
   while(LREP->iter < LREP->maxIter) {
-
+    mult = (0 == LREP->iter) ? 2 : 3;
     breaking = 0;
-
-    if(LREP->iter) {
-      mult = 3;
-    } else {
-      mult = 2;
-    }
     
     sp_setup_P(LREP);
     sp_setup_Q(LREP);
 
-    printf("pq\n");
+    //    printf("pq\n");
     
     sp_apply_precond(LREP);
-    printf("precond\n");
+    //    printf("precond\n");
 
     sp_setup_U(LREP);
     sp_setup_V(LREP);
-    printf("uv\n");
+    //    printf("uv\n");
 
     get_q(LREP->size, mult*LREP->sizeSub, LREP->U, LREP->flag);
     get_q(LREP->size, mult*LREP->sizeSub, LREP->V, LREP->flag);
-    printf("ortho\n");
+    //    printf("ortho\n");
     
     sp_setup_W(LREP);
     matrix_inverse(mult*LREP->sizeSub, LREP->W, LREP->flag);
@@ -930,14 +1099,14 @@ void sp_lopb4dcg(sp_lrep_t *LREP) {
     //sp_setup_W(LREP);
     //matrix_inverse(mult*LREP->nev, LREP->W, LREP->flag);
     sp_setup_Hsr(LREP);
-    printf("Hsr\n");
+    //    printf("Hsr\n");
 
     calc_eig_val(2*mult*LREP->sizeSub, LREP->Hsr, LREP->eValsr,
 		  LREP->eVecsr, LREP->flag);
-    printf("got eigenvalues.\n");
+    //    printf("got eigenvalues.\n");
 
     sp_sort_eig(LREP);
-    printf("sorted eigenvalues.\n");
+    //    printf("sorted eigenvalues.\n");
 
     sp_split_eig_vec(LREP);
 
@@ -955,6 +1124,7 @@ void sp_lopb4dcg(sp_lrep_t *LREP) {
     sp_switch_eig_vec(LREP);
 
     // Assign eigenvalues as new search directions
+#pragma omp parallel for
     for(int i = 0; i < LREP->sizeSub; i++)
       LREP->eigVal[i+i*LREP->sizeSub] = LREP->eValSort[i];
 
@@ -962,10 +1132,12 @@ void sp_lopb4dcg(sp_lrep_t *LREP) {
 
     breaking = 0;
 
-    for(int i = 0; i < LREP->nev; i++) {
+    for(int i = 0; i < LREP->nev; i++)
+      breaking += (LREP->resNorm[i] < LREP->tol) ? 1 : 0;
+    /*
       if(LREP->resNorm[i] < LREP->tol)
 	breaking += 1;
-    }
+	}*/
 
     if(breaking == LREP->nev) 
       break;

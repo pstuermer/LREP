@@ -44,6 +44,13 @@ struct coo_t *setup_diff2(const double *ln, const int *N, const int dim,
 struct coo_t *diff_1D(const double *ln, const int *N, const char flag);
 struct coo_t *diff_2D(const double *ln, const int *N, const char flag);
 struct coo_t *diff_3D(const double *ln, const int *N, const char flag);
+
+struct rsb_mtx_t *rsb_setup_diff2(const double *ln, const int *N, const int dim);
+struct rsb_mtx_t *rsb_diff_1D(const double *ln, const int *N);
+struct rsb_mtx_t *rsb_diff_2D(const double *ln, const int *N);
+struct rsb_mtx_t *rsb_diff_3D(const double *ln, const int *N);
+void set_coo_indices_diff(int size, int *rows, int *cols);
+void set_coo_indices_unit(int size, double *vals, int *rows, int *cols);
 void fourier_diff2(const double lx, const int N, double *diffMatrix);
 void fourier_diff1(const double lx, const int N, double *diffMatrix);
 
@@ -66,6 +73,11 @@ void setup_trap(coo_t *cooTrap, const int *N, const double *param, grid_t *grid,
 double trap_1D(const double *param, grid_t *sys, int *index, const int trapChoice);
 double trap_2D(const double *param, grid_t *sys, int *index, const int trapChoice);
 double trap_3D(const double *param, grid_t *sys, int *index, const int trapChoice);
+
+struct rsb_mtx_t *rsb_setup_trap(double (*V_trap_func)(double*), grid_t *grid);
+struct rsb_mtx_t *rsb_setup_int(double *apsi, double mu, const int *N,
+				const int dim, const double *intParam);
+double rsb_int(double apsi, double mu, const int dim, const double *intParam);
 
 
 void setup_Uint(coo_t *cooUint, double *apsi1, double *apsi2, const int *N,

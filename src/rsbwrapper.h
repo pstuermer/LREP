@@ -29,6 +29,11 @@
 void rsb_init(const int rsbTune);
 struct rsb_mtx_t *rsb_mtx_from_coo(coo_t *matrix);
 struct rsb_mtx_t *rsb_mtx_from_coo_sym(coo_t *matrix);
+struct rsb_mtx_t *rsb_mtx_from_coo_sym_new(double *vals, int *rows, int *cols,
+					   int nnz, int nrows);
+struct rsb_mtx_t *rsb_dadd(struct rsb_mtx_t *left, struct rsb_mtx_t *right);
+struct rsb_mtx_t *rsb_dsub(struct rsb_mtx_t *left, struct rsb_mtx_t *right);
+struct rsb_mtx_t *rsb_dkron(struct rsb_mtx_t *left, struct rsb_mtx_t *right);
 void rsb_SPMM(struct rsb_mtx_t *spMatrix, const void *dMatrix,
 	      void *res, const int nev, const char flag);
 void rsb_SPMM_sub(struct rsb_mtx_t *spMatrix, const void *dMatrix,

@@ -48,7 +48,36 @@ void sp_setup_precond(struct sp_lrep_t *LREP) {
    
   // either switch or if    
   int type = LREP->spPrecond->type;
-   
+
+  switch(type)
+    {
+    case 0:
+      ; // do nothing, as no preconditioner chosen
+      break;
+
+    case 1:
+      // diagonal preconditioner
+      sp_get_diag_precond(LREP);
+      break;
+
+    case 2:
+      // ILU(0) preconditioner (doesn't have shift in it yet)
+      // also generally not working?
+      rsb_get_prec(LREP->K, LREP->spPrecond->KPrecond);
+      rsb_get_prec(LREP->M, LREP->spPrecond->MPrecond);
+      break;
+
+    case 3:
+      // conjugate gradient preconditioner
+      sp_get_diag_precond(LREP);
+      break;
+
+    default:
+      fprintf(stderr, "Preconditioner type not recognized.\n");
+      exit(1);
+    }
+}
+/*  
   if (!type) {    
     // do nithing, as no preconditioner chosen  
     ;
@@ -70,41 +99,33 @@ void sp_setup_precond(struct sp_lrep_t *LREP) {
   
   
 }
+*/
 
 void sp_get_diag_precond(struct sp_lrep_t *LREP) { 
   // do it for both K and M 
   int size = LREP->size;
-  coo_t *MDiag, *KDiag;
-  MDiag = coo_malloc(size, size, size, LREP->flag);
-  KDiag = coo_malloc(size, size, size, LREP->flag);
 
-  double complex *M, *K;
-  M = xmalloc(size*sizeof(double complex));
-  K = xmalloc(size*sizeof(double complex));
+  double *vals = xmalloc(size*sizeof(double));
+  int *cols = xmalloc(size*sizeof(int));
+  int *rows = xmalloc(size*sizeof(int));
+
+#pragma omp parallel for schedule (static)
+  for(int i = 0; i < size; i++) {
+    cols[i] = i;
+    rows[i] = i;
+  }
   
   // K first 
-  rsb_mtx_get_vec(LREP->K, K, RSB_EXTF_DIAG);
-  for(int i = 0; i < size; i++)
-    coo_insert(KDiag, 1.0/(creal(K[i]-LREP->spPrecond->shift)),
-	       0.0, i, i);
-  LREP->spPrecond->KDiag = rsb_mtx_from_coo(KDiag);
+  rsb_mtx_get_vec(LREP->K, vals, RSB_EXTF_DIAG);
+  LREP->spPrecond->KDiag = rsb_mtx_from_coo_sym_new(vals, rows, cols, size, size);
 
+  // M next
+  rsb_mtx_get_vec(LREP->M, vals, RSB_EXTF_DIAG);
+  LREP->spPrecond->MDiag = rsb_mtx_from_coo_sym_new(vals, rows, cols, size, size);
 
-  // M next  
-  rsb_mtx_get_vec(LREP->M, M, RSB_EXTF_DIAG);
-  for (int i = 0; i < size; i++) 
-    coo_insert(MDiag, 1.0/(creal(M[i]-LREP->spPrecond->shift)),
-	       0.0, i, i);
-  LREP->spPrecond->MDiag = rsb_mtx_from_coo(MDiag);
-
-  
-  coo_free( KDiag );
-  safe_free( K );
-  
-  coo_free( MDiag );
-  safe_free( M );
-  
-  
+  safe_free( cols );
+  safe_free( rows );
+  safe_free( vals );
 }
 
 void de_conj_grad(double *deMatrix, double *dVec, double *sol, 

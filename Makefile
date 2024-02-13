@@ -11,7 +11,7 @@ I_OPTS = "{includedir}"
 includedir = "${prefix}/include"
 prefix = "/nfs/users3/philst/librsb"
 
-CFLAGS = -std=c11 `librsb-config --I_opts --cflags` -g -O3 -Wall -Wextra -Isrc -rdynamic -pedantic -DNDEBUG $(OPTFLAGS) -march=native -mfpmath=sse -msse2 -fopenmp
+CFLAGS = -std=c11 `librsb-config --I_opts --cflags` -O2 -Wall -Wextra -Isrc -rdynamic -pedantic $(OPTFLAGS) -march=native -mfpmath=sse -msse2 -fopenmp
 MATHFLAGS = -lm
 #LIBS = -ldl $(OPTLIBS)
 #PREFIX ?= /usr/local
@@ -86,9 +86,31 @@ splopb4dcg.o: ./src/splopb4dcg.c ./src/splopb4dcg.h
 clean:
 	rm *.a *.o *.ex
 
-main.ex: ./main.c
-	gcc $(CFLAGS) -march=native -mfpmath=sse -msse2 -c main.c
-	gcc -std=c11 -g main.o -o main.ex -L. -llrep `librsb-config --static --ldflags --extra_libs` -L$(LAPACK_PATH) -llapack -I$(OPENBLAS_PATH2) -L$(OPENBLAS_PATH1) -lopenblas -pg -lm 
+test_diff2.ex: ./test_rsb_setup_diff2.c
+	gcc $(CFLAGS) -march=native -mfpmath=sse -msse2 -c test_rsb_setup_diff2.c
+	gcc -std=c11 -g test_rsb_setup_diff2.o -o test.ex -L. -llrep `librsb-config --static --ldflags --extra_libs` -L$(LAPACK_PATH) -llapack -I$(OPENBLAS_PATH2) -L$(OPENBLAS_PATH1) -lopenblas -pg -lm
+
+test_fourier2.ex: ./test_fourier2.c
+	gcc $(CFLAGS) -march=native -mfpmath=sse -msse2 -c test_fourier2.c
+	gcc -std=c11 -g test_fourier2.o -o test.ex -L. -llrep `librsb-config --static --ldflags --extra_libs` -L$(LAPACK_PATH) -llapack -I$(OPENBLAS_PATH2) -L$(OPENBLAS_PATH1) -lopenblas -pg -lm
+
+test_kron.ex: ./test_kron.c
+	gcc $(CFLAGS) -march=native -mfpmath=sse -msse2 -c test_kron.c
+	gcc -std=c11 -g test_kron.o -o test.ex -L. -llrep `librsb-config --static --ldflags --extra_libs` -L$(LAPACK_PATH) -llapack -I$(OPENBLAS_PATH2) -L$(OPENBLAS_PATH1) -lopenblas -pg -lm
+
+test_grid.ex: ./test_grid.c
+	gcc $(CFLAGS) -march=native -mfpmath=sse -msse2 -c ./test_grid.c
+	gcc -std=c11 -g test_grid.o -o test.ex -L. -llrep `librsb-config --static --ldflags --extra_libs` -L$(LAPACK_PATH) -llapack -I$(OPENBLAS_PATH2) -L$(OPENBLAS_PATH1) -lopenblas -pg -lm
+
+test_trap.ex: ./test_trap.c
+	gcc $(CFLAGS) -march=native -mfpmath=sse -msse2 -c ./test_trap.c
+	gcc -std=c11 -g test_trap.o -o test.ex -L. -llrep `librsb-config --static --ldflags --extra_libs` -L$(LAPACK_PATH) -llapack -I$(OPENBLAS_PATH2) -L$(OPENBLAS_PATH1) -lopenblas -pg -lm
+
+test_uint.ex: ./test_uint.c
+	gcc $(CFLAGS) -march=native -mfpmath=sse -msse2 -c ./test_uint.c
+	gcc -std=c11 -g test_uint.o -o test.ex -L. -llrep `librsb-config --static --ldflags --extra_libs` -L$(LAPACK_PATH) -llapack -I$(OPENBLAS_PATH2) -L$(OPENBLAS_PATH1) -lopenblas -pg -lm
+
 
 valgrind: 
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind.out.txt ./main.ex
+
