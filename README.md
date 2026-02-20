@@ -1,6 +1,7 @@
 # LOPB4DCG-LREP
 Implements a locally-optimal preconditioned block 4-dimensional conjugate gradient method to solve a linear response problem. Implementation based on https://epubs.siam.org/doi/10.1137/110838972 and https://link.springer.com/article/10.1007/s10543-014-0472-6.
-This is a learning project and thus a prototype code and currently not meant to be used.
+
+This was my first scientific computing project and the predecessor to my LOBPCG implementation, which replaced this approach with a gradient-based method achieving 100x speedups.
 
 ## 1. What does this software do?
 This software is a CPU-based Linear Response Eigenvalue Problem (LREP) Solver utilizing a conjugate-gradient type algorithm (https://epubs.siam.org/doi/10.1137/110838972 and https://link.springer.com/article/10.1007/s10543-014-0472-6). Usually, this kind of problem can be easily solved using diagonalization routines included in ARPACK or LAPACK. However, as this is the first piece of scientific software I wrote in C, I wanted to challenge myself and implement a non-standard algorithm. **This also means that the code itself is a learning project and contains a lot of beginner mistakes, and thereby is not recommended to be used as is. I plan on refactoring a majority of the code and extending it by the end of my PhD.**
